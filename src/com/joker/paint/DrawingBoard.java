@@ -31,6 +31,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         switch (settings.getType()){
             case RECT:
             case IMAGE:
+            case TEXT:
                 drawingBoard.setPreview(new DrawingShape(Color.BLACK,new Rectangle(xx,yy,disX,disY),false,dash));
                 break;
             case OVAL:
