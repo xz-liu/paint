@@ -95,6 +95,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
             now = new Point(e.getPoint());
             if (settings.getType() == BoardSettings.Type.POLYGON) {
                 settings.points.addElement(now);
+                setPreview(begin, now);
             }
             else if (settings.getType() != BoardSettings.Type.MOVE)
                 setPreview(begin, now);

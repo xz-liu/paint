@@ -46,7 +46,17 @@ public class MainForm extends JFrame{
                 new StrokeSample(new BasicStroke(9f)),
                 new StrokeSample(new BasicStroke(10f)),
                 new StrokeSample(new BasicStroke(11f)),
-                new StrokeSample(new BasicStroke(12f))
+                new StrokeSample(new BasicStroke(12f)),
+                new StrokeSample(new BasicStroke(1f, BasicStroke.CAP_BUTT,
+                        BasicStroke.JOIN_ROUND, 1f, new float[]{15, 10,},
+                        0f)),
+                new StrokeSample(new BasicStroke(2.5f, BasicStroke.CAP_BUTT,
+                BasicStroke.JOIN_ROUND, 3.5f, new float[]{15, 10,},
+                0f)),
+                new StrokeSample(new BasicStroke(3.5f, BasicStroke.CAP_BUTT,
+                        BasicStroke.JOIN_ROUND, 3.5f, new float[]{15, 10,},
+                        0f)),
+
         };
         strokeChooserPanel = new StrokeChooserPanel(new StrokeSample(new BasicStroke(3f)), samples);
         strokeChooserPanel.addSelectorListener(e->{
@@ -174,7 +184,9 @@ public class MainForm extends JFrame{
         }catch (Exception e){
             JOptionPane.showMessageDialog(this,"LOAD NAPKIN FAILED");
         }
-        this.setSize(new Dimension(800,500));
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setSize(d.width, d.height);
+        this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.setTitle("Paint");
