@@ -30,6 +30,9 @@ public class BoardSettings {
         this.fill=false;
         this.history=jFrame.getHistory();
     }
+    public void clearPoints(){
+        setPoints(null);
+    }
 
     public JPanel getHistory() {
         return history;

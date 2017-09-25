@@ -28,4 +28,9 @@ public class DrawingPolygon extends DrawingItem {
             graphics2D.drawPolygon(_shape);
         }
     }
+
+    @Override
+    public DrawingItem createPreview() {
+        return new DrawingPolygon(selectedColor,_shape,_fill,_stroke);
+    }
 }

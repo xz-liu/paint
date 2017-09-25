@@ -24,6 +24,9 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
     private void setPreview(){
         drawingBoard.setPreview(null);
     }
+    private void setPreview(DrawingItem item){
+        drawingBoard.setPreview(item);
+    }
     private void setPreview(Point beg,Point mouse){
         int xx = Math.min(beg.x, mouse.x),
                 yy = Math.min(beg.y, mouse.y),
@@ -142,6 +145,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
     public void mouseExited(MouseEvent e) {
         if (settings.getType() == BoardSettings.Type.POLYGON) {
             Vector<Point> points = settings.getPoints();
+            if(points==null||points.isEmpty())return;
             int[] xpoints = new int[points.size()], ypoints = new int[points.size()];
             int i = 0;
             for (Point point : points) {
@@ -158,11 +162,30 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
     private void addListItem(DrawingItem item) {
         if (settings.getPoints() != null) {
             itemsList.add(item);
-            buttons.add(new JButton(settings.getType().toString()));
-            settings.getHistory().add(buttons.getLast());
-            settings.getHistory().repaint();
+            HistoryButton button=new HistoryButton(settings.getType().toString(),item);
+            button.addActionListener(e->{
+                if(settings.getType()== BoardSettings.Type.DELETE){
+                    itemsList.remove(button.item);
+                    settings.getHistory().remove(button);
+                    settings.getHistory().revalidate();
+                    setPreview();
+                }
+                else {
+                    setPreview(button.item.createPreview());
+                }
+                drawingBoard.repaint();
+            });
+            settings.getHistory().add(button);
+            settings.getHistory().revalidate();
             settings.setPoints(null);
         }
+    }
+}
+class HistoryButton extends JButton{
+    DrawingItem item;
+    public HistoryButton(String title,DrawingItem item){
+        super(title);
+        this.item=item;
     }
 }
 public class DrawingBoard extends JPanel  {

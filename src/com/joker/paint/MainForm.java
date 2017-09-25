@@ -28,30 +28,37 @@ public class MainForm extends JFrame{
         buttonPoints=new JButton("Pen");
         buttonPoints.addActionListener(e-> {
             settings.setType(BoardSettings.Type.POINTS);
+            settings.clearPoints();
         });
         buttonOval=new JButton("Oval");
         buttonOval.addActionListener(e-> {
             settings.setType(BoardSettings.Type.OVAL);
+            settings.clearPoints();
         });
         buttonPolygon=new JButton("Polygon");
         buttonPolygon.addActionListener(e-> {
             settings.setType(BoardSettings.Type.POLYGON);
+            settings.clearPoints();
         });
         buttonDelete=new JButton("Del");
         buttonDelete.addActionListener(e-> {
             settings.setType(BoardSettings.Type.DELETE);
+            settings.clearPoints();
         });
         buttonOpenImg=new JButton("Image");
         buttonOpenImg.addActionListener(e-> {
             settings.setType(BoardSettings.Type.IMAGE);
+            settings.clearPoints();
         });
         buttonRect=new JButton("Rect");
         buttonRect.addActionListener(e-> {
             settings.setType(BoardSettings.Type.RECT);
+            settings.clearPoints();
         });
         buttonText=new JButton("Text");
         buttonText.addActionListener(e ->  {
                 settings.setType(BoardSettings.Type.TEXT);
+            settings.clearPoints();
         });
 
         buttonColor=new JButton("Color");
@@ -89,6 +96,11 @@ public class MainForm extends JFrame{
         mainPanel.setLayout(new BorderLayout(1,1));
         select=new JPanel();
         history=new JPanel();
+        JScrollPane historyScroll=new JScrollPane(history);
+
+        historyScroll.setBounds(0,0,0,50);
+        history.setAutoscrolls(true);
+        historyScroll.setPreferredSize(new Dimension(80,700));
         history.setSize(new Dimension(100,700));
         history.setLayout(new BoxLayout(history,BoxLayout.PAGE_AXIS));
         select.setSize(new Dimension(700,30));
@@ -97,9 +109,10 @@ public class MainForm extends JFrame{
         initButtons();
         mainPanel.add(board);
         mainPanel.add(select,BorderLayout.NORTH);
-        mainPanel.add(history,BorderLayout.WEST);
+//        mainPanel.add(history,BorderLayout.WEST);
+        mainPanel.add(historyScroll,BorderLayout.WEST);
         this.add(mainPanel);
-        this.repaint();
+        select.revalidate();
     }
     public static void main(String[] args) {
         MainForm mainForm=new MainForm();

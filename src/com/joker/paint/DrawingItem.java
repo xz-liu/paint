@@ -12,6 +12,7 @@ public abstract class DrawingItem {
         IMAGE,TEXT,SHAPE,POINTS,POLYGON
     }
     protected Type _type;
+    protected final Color selectedColor=Color.RED;
     public Type getType(){
         return _type;
     }
@@ -22,6 +23,7 @@ public abstract class DrawingItem {
         _type=type;
     }
     public abstract void draw(Graphics g);
-    public void drawSelected(Graphics g, MouseEvent e){}
+    public abstract DrawingItem createPreview();
+
 
 }

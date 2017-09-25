@@ -23,4 +23,9 @@ public class DrawingPoints extends DrawingItem {
             graphics2D.drawLine(x.x,x.y,x.x,x.y);
         }
     }
+
+    @Override
+    public DrawingItem createPreview() {
+        return new DrawingPoints(selectedColor,_points,_stroke);
+    }
 }

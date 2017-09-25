@@ -27,4 +27,9 @@ public class DrawingShape extends DrawingItem {
             graphics2D.draw(_shape);
         }
     }
+
+    @Override
+    public DrawingItem createPreview() {
+        return new DrawingShape(selectedColor,_shape,_fill,_stroke);
+    }
 }

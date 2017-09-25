@@ -20,4 +20,10 @@ public class DrawingImage extends DrawingItem {
         Graphics2D graphics2D=(Graphics2D)g;
         graphics2D.drawImage(_image,_pos.x,_pos.y,_pos.width,_pos.height,_imgObserver);
     }
+
+    @Override
+    public DrawingItem createPreview() {
+        return new DrawingShape(selectedColor,
+                new Rectangle(_pos.x,_pos.y,_pos.width,_pos.height),false,new BasicStroke(3f));
+    }
 }
