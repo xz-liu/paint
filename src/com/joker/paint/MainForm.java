@@ -13,12 +13,17 @@ import java.awt.event.ActionListener;
  */
 public class MainForm extends JFrame{
     private DrawingBoard board;
-    private JPanel mainPanel,select;
+    private JPanel mainPanel,select,history;
     private BoardSettings settings;
     private JButton buttonOpenImg,buttonDelete,buttonPoints,buttonPolygon,buttonOval,buttonRect,buttonText;
     private JTextField textImput;
     private JButton buttonColor,buttonStroke,buttonSave;
     private JCheckBox checkBoxFill;
+
+    public JPanel getHistory() {
+        return history;
+    }
+
     private void initButtons(){
         buttonPoints=new JButton("Pen");
         buttonPoints.addActionListener(e-> {
@@ -64,7 +69,6 @@ public class MainForm extends JFrame{
         select.add(buttonOpenImg);
         select.add(buttonDelete);
 
-
         textImput=new JTextField(15);
     }
     public  MainForm(){
@@ -80,22 +84,24 @@ public class MainForm extends JFrame{
         this.setVisible(true);
         this.setTitle("Paint");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        settings=new BoardSettings(this);
         mainPanel=new JPanel();
         mainPanel.setSize(new Dimension(700,500));
         mainPanel.setLayout(new BorderLayout(1,1));
         select=new JPanel();
+        history=new JPanel();
+        history.setSize(new Dimension(100,700));
+        history.setLayout(new BoxLayout(history,BoxLayout.PAGE_AXIS));
         select.setSize(new Dimension(700,30));
+        settings=new BoardSettings(this);
         board=new DrawingBoard(settings);
         initButtons();
         mainPanel.add(board);
         mainPanel.add(select,BorderLayout.NORTH);
+        mainPanel.add(history,BorderLayout.WEST);
         this.add(mainPanel);
         this.repaint();
     }
     public static void main(String[] args) {
         MainForm mainForm=new MainForm();
-
-
     }
 }

@@ -18,6 +18,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
     BoardSettings settings;
     DrawingBoard drawingBoard;
     LinkedList<DrawingItem> itemsList;
+    LinkedList<JButton> buttons;
     Point begin, now, end;
     Stroke dash;
     private void setPreview(){
@@ -53,6 +54,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         this.dash = new BasicStroke(2.5f, BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_ROUND, 3.5f, new float[]{15, 10,},
                 0f);
+        this.buttons=new LinkedList<>();
     }
 
     @Override
@@ -101,26 +103,24 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                     disY = Math.abs(points.firstElement().y - points.lastElement().y);
             switch (settings.getType()) {
                 case OVAL:
-                    itemsList.add(new DrawingShape(settings.color,
+                    addListItem(new DrawingShape(settings.color,
                             new Ellipse2D.Double(xx, yy, disX, disY), settings.isFill(), settings.getStroke()));
-                    settings.setPoints(null);
+//                    settings.setPoints(null);
                     setPreview();
                     break;
                 case RECT:
-                    itemsList.add(new DrawingShape(settings.color,
+                    addListItem(new DrawingShape(settings.color,
                             new Rectangle((int) xx, (int) yy, (int) disX, (int) disY), settings.isFill(), settings.getStroke()));
-                    settings.setPoints(null);
+//                    settings.setPoints(null);
                     setPreview();
                     break;
                 case IMAGE:
-                    itemsList.add(new DrawingImage(settings.getImgNow(),
+                    addListItem(new DrawingImage(settings.getImgNow(),
                             new Rectangle((int) xx, (int) yy, (int) disX, (int) disY), settings.mainFrame));
-                    settings.setPoints(null);
                     setPreview();
                     break;
                 case POINTS:
-                    itemsList.add(new DrawingPoints(settings.color, points.toArray(new Point[0]), settings.getStroke()));
-                    settings.setPoints(null);
+                    addListItem(new DrawingPoints(settings.color, points.toArray(new Point[0]), settings.getStroke()));
                     setPreview();
                     break;
                 default:
@@ -144,20 +144,24 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
             Vector<Point> points = settings.getPoints();
             int[] xpoints = new int[points.size()], ypoints = new int[points.size()];
             int i = 0;
-            StringBuilder stringBuilder=new StringBuilder();
-            stringBuilder.append(points.size()+"Points:");
             for (Point point : points) {
                 xpoints[i] = (point.x);
                 ypoints[i] = (point.y);
-                stringBuilder.append("("+point.x+","+point.y+")");
                 i++;
             }
 //            JOptionPane.showMessageDialog(settings.mainFrame,stringBuilder.toString());
-            itemsList.add(new DrawingPolygon(settings.color,
+            addListItem(new DrawingPolygon(settings.color,
                     new Polygon(xpoints, ypoints, points.size()), settings.isFill(), settings.getStroke()));
-
-            settings.setPoints(null);
             drawingBoard.repaint();
+        }
+    }
+    private void addListItem(DrawingItem item) {
+        if (settings.getPoints() != null) {
+            itemsList.add(item);
+            buttons.add(new JButton(settings.getType().toString()));
+            settings.getHistory().add(buttons.getLast());
+            settings.getHistory().repaint();
+            settings.setPoints(null);
         }
     }
 }

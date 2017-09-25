@@ -1,5 +1,6 @@
 package com.joker.paint;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Vector;
@@ -18,14 +19,20 @@ public class BoardSettings {
     String text;
     Vector<Point> points;
     Type type;
-    JFrame mainFrame;
-    public BoardSettings(JFrame jFrame) {
-        type = Type.OVAL;
+    MainForm mainFrame;
+    JPanel history;
+    public BoardSettings(MainForm jFrame) {
+        type = Type.POINTS;
         this.mainFrame = jFrame;
         this.color=Color.BLACK;
         this.stroke=new BasicStroke(5f);
         this.imgNow=null;
         this.fill=false;
+        this.history=jFrame.getHistory();
+    }
+
+    public JPanel getHistory() {
+        return history;
     }
 
     public void setType(Type type) {
