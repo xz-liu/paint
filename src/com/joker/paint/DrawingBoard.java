@@ -3,6 +3,7 @@ package com.joker.paint;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -163,18 +164,20 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         if (settings.getPoints() != null) {
             itemsList.add(item);
             HistoryButton button=new HistoryButton(settings.getType().toString(),item);
-            button.addActionListener(e->{
+            final ActionListener listener=e->{
                 if(settings.getType()== BoardSettings.Type.DELETE){
                     itemsList.remove(button.item);
                     settings.getHistory().remove(button);
                     settings.getHistory().revalidate();
+                    settings.getHistory().repaint();
                     setPreview();
                 }
                 else {
                     setPreview(button.item.createPreview());
                 }
                 drawingBoard.repaint();
-            });
+            };
+            button.addActionListener(listener);
             settings.getHistory().add(button);
             settings.getHistory().revalidate();
             settings.setPoints(null);
