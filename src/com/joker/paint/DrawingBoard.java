@@ -36,7 +36,6 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         switch (settings.getType()){
             case RECT:
             case IMAGE:
-            case TEXT:
                 drawingBoard.setPreview(new DrawingShape(settings.color,new Rectangle(xx,yy,disX,disY),false,dash));
                 break;
             case OVAL:
@@ -44,11 +43,19 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                 break;
             case POINTS:
             case POLYGON:
-                drawingBoard.setPreview(new DrawingPoints(settings.color,settings.getPoints().toArray(new Point[0]),settings.stroke));
+                drawingBoard.setPreview(new DrawingPoints(settings.color,settings.getPoints().toArray(new Point[0]),dash));
+                break;
+            case TEXT:
+                drawingBoard.setPreview(new DrawingText(settings.getText(),now,settings.getFont(),settings.getColor()));
                 break;
         }
     }
-    
+
+    private void repositionPreview(Point pos){
+        if (drawingBoard.getPreview()!=null)
+             drawingBoard.getPreview().reposition(pos);
+    }
+
     public BoardMouseListener(BoardSettings settings,
                               LinkedList<DrawingItem> itemsList,
                               DrawingBoard drawingBoard) {
@@ -66,8 +73,13 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         now = new Point(e.getPoint());
         if (settings.getType() == BoardSettings.Type.POINTS) {
             settings.getPoints().addElement(now);
+            setPreview(begin, now);
         }
-        setPreview(begin,now);
+        else if (settings.getType() != BoardSettings.Type.MOVE)
+            setPreview(begin, now);
+        else {
+            repositionPreview(now);
+        }
         drawingBoard.repaint();
     }
 
@@ -80,11 +92,15 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
     public void mouseClicked(MouseEvent e) {
 
         if (begin != null) {
+            now = new Point(e.getPoint());
             if (settings.getType() == BoardSettings.Type.POLYGON) {
-                now = new Point(e.getPoint());
                 settings.points.addElement(now);
             }
-            setPreview(begin,now);
+            else if (settings.getType() != BoardSettings.Type.MOVE)
+                setPreview(begin, now);
+            else {
+                repositionPreview(now);
+            }
         }
         drawingBoard.repaint();
     }
@@ -127,6 +143,12 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                     addListItem(new DrawingPoints(settings.color, points.toArray(new Point[0]), settings.getStroke()));
                     setPreview();
                     break;
+                case TEXT:
+                    addListItem(new DrawingText(settings.getText(),end,settings.getFont(),settings.getColor()));
+                    setPreview();
+                    break;
+                case MOVE:
+                    settings.replace(end);
                 default:
                     break;
             }
@@ -171,6 +193,9 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                     settings.getHistory().revalidate();
                     settings.getHistory().repaint();
                     setPreview();
+                }else if(settings.getType()== BoardSettings.Type.MOVE){
+                    setPreview(button.item.createPreview());
+                    settings.setItemReplacing(button.item);
                 }
                 else {
                     setPreview(button.item.createPreview());
@@ -207,6 +232,11 @@ public class DrawingBoard extends JPanel  {
     void setPreview(DrawingItem item){
         this.preview=item;
     }
+
+    public DrawingItem getPreview() {
+        return preview;
+    }
+
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);

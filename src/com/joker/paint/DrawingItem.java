@@ -12,7 +12,10 @@ public abstract class DrawingItem {
         IMAGE,TEXT,SHAPE,POINTS,POLYGON
     }
     protected Type _type;
-    protected final Color selectedColor=Color.RED;
+    protected static final Color selectedColor=Color.RED;
+    public static final Color getSelectedColor(){
+        return selectedColor;
+    }
     public Type getType(){
         return _type;
     }
@@ -22,6 +25,7 @@ public abstract class DrawingItem {
     protected DrawingItem(Type type){
         _type=type;
     }
+    public abstract void reposition(Point pos);
     public abstract void draw(Graphics g);
     public abstract DrawingItem createPreview();
 

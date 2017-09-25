@@ -18,6 +18,13 @@ public class DrawingPolygon extends DrawingItem {
         _fill=fill;
         _stroke=fill?null:stroke;
     }
+    public void reposition(Point pos) {
+        Point delta=new Point(pos.x-_shape.xpoints[0],pos.y-_shape.ypoints[0]);
+        for(int i=0;i<_shape.npoints;i++){
+            _shape.xpoints[i]+=delta.x;
+            _shape.ypoints[i]+=delta.y;
+        }
+    }
     public void draw(Graphics g){
         Graphics2D graphics2D=(Graphics2D)g;
         graphics2D.setColor(_color);

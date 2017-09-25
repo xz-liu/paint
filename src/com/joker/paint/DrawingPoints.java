@@ -15,6 +15,13 @@ public class DrawingPoints extends DrawingItem {
         _points=points;
         _stroke=stroke;
     }
+    public void reposition(Point pos) {
+        Point delta=new Point(pos.x-_points[0].x,pos.y-_points[0].y);
+        for (Point x:_points){
+            x.x+=delta.x;
+            x.y+=delta.y;
+        }
+    }
     public void draw(Graphics g){
         Graphics2D graphics2D=(Graphics2D)g;
         graphics2D.setColor(_color);

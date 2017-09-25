@@ -1,6 +1,7 @@
 package com.joker.paint;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 
 /**
  * Created by Adam on 2017/9/18.
@@ -16,6 +17,20 @@ public class DrawingShape extends DrawingItem {
         _shape=shape;
         _fill=fill;
         _stroke=fill?null:stroke;
+    }
+    public void reposition(Point pos){
+        if(_shape.getClass().getName().equals(Rectangle.class.getName())){
+            Rectangle rectangle=(Rectangle)_shape;
+            rectangle.x= pos.x;
+            rectangle.y=pos.y;
+            _shape=rectangle;
+        }
+        if(_shape.getClass().getName().equals(Ellipse2D.Double.class.getName())){
+            Ellipse2D.Double oval=(Ellipse2D.Double) _shape;
+            oval.x= pos.x;
+            oval.y=pos.y;
+            _shape=oval;
+        }
     }
     public void draw(Graphics g){
         Graphics2D graphics2D=(Graphics2D)g;

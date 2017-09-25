@@ -16,6 +16,13 @@ public class DrawingImage extends DrawingItem {
        _pos=pos;
        _imgObserver=imgObserver;
     }
+
+    @Override
+    public void reposition(Point pos) {
+        _pos.x=pos.x;
+        _pos.y=pos.y;
+    }
+
     public void draw(Graphics g){
         Graphics2D graphics2D=(Graphics2D)g;
         graphics2D.drawImage(_image,_pos.x,_pos.y,_pos.width,_pos.height,_imgObserver);

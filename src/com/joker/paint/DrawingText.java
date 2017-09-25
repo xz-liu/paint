@@ -23,7 +23,10 @@ public class DrawingText extends DrawingItem {
         graphics2D.setColor(color);
         graphics2D.drawString(text,pos.x,pos.y);
     }
-
+    public void reposition(Point pos) {
+        this.pos.x=pos.x;
+        this.pos.y=pos.y;
+    }
     @Override
     public DrawingItem createPreview() {
         return new DrawingText(text,pos,font,selectedColor);

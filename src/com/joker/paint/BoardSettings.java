@@ -4,13 +4,12 @@ package com.joker.paint;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Vector;
-
 /**
  * Created by Adam on 2017/9/22.
  */
 public class BoardSettings {
     public enum Type{
-     POINTS,IMAGE,POLYGON,OVAL,RECT,TEXT,DELETE
+     POINTS,IMAGE,POLYGON,OVAL,RECT,TEXT,DELETE,MOVE
     }
     Stroke stroke;
     Color color;
@@ -21,6 +20,28 @@ public class BoardSettings {
     Type type;
     MainForm mainFrame;
     JPanel history;
+    DrawingItem itemReplacing;
+    public void replace(Point pos){
+        if (getItemReplacing()!=null){
+            getItemReplacing().reposition(pos);
+        }
+    }
+    public DrawingItem getItemReplacing() {
+        return itemReplacing;
+    }
+    public void setItemReplacing(DrawingItem item){
+        itemReplacing=item;
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        this.font = font;
+    }
+
+    Font  font;
     public BoardSettings(MainForm jFrame) {
         type = Type.POINTS;
         this.mainFrame = jFrame;
@@ -29,6 +50,9 @@ public class BoardSettings {
         this.imgNow=null;
         this.fill=false;
         this.history=jFrame.getHistory();
+        this.font=new JLabel().getFont();
+        this.text="";
+        this.itemReplacing=null;
     }
     public void clearPoints(){
         setPoints(null);
