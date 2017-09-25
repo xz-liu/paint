@@ -19,9 +19,13 @@ public class DrawingPoints extends DrawingItem {
         Graphics2D graphics2D=(Graphics2D)g;
         graphics2D.setColor(_color);
         graphics2D.setStroke(_stroke);
-        for(Point x:_points){
-            graphics2D.drawLine(x.x,x.y,x.x,x.y);
+        for(int i=1;i<_points.length;i++){
+            Point x=_points[i],y=_points[i-1];
+            graphics2D.drawLine(x.x,x.y,y.x,y.y);
         }
+//        for(Point x:_points){
+//            graphics2D.drawLine(x.x,x.y,x.x,x.y);
+//        }
     }
 
     @Override
