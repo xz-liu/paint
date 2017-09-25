@@ -32,14 +32,14 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
             case RECT:
             case IMAGE:
             case TEXT:
-                drawingBoard.setPreview(new DrawingShape(Color.BLACK,new Rectangle(xx,yy,disX,disY),false,dash));
+                drawingBoard.setPreview(new DrawingShape(settings.color,new Rectangle(xx,yy,disX,disY),false,dash));
                 break;
             case OVAL:
-                drawingBoard.setPreview(new DrawingShape(Color.BLACK,new Ellipse2D.Float(xx,yy,disX,disY),false,dash));
+                drawingBoard.setPreview(new DrawingShape(settings.color,new Ellipse2D.Float(xx,yy,disX,disY),false,dash));
                 break;
             case POINTS:
             case POLYGON:
-                drawingBoard.setPreview(new DrawingPoints(Color.BLACK,settings.getPoints().toArray(new Point[0]),settings.stroke));
+                drawingBoard.setPreview(new DrawingPoints(settings.color,settings.getPoints().toArray(new Point[0]),settings.stroke));
                 break;
         }
     }
@@ -76,7 +76,6 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         if (begin != null) {
             if (settings.getType() == BoardSettings.Type.POLYGON) {
                 now = new Point(e.getPoint());
-                JOptionPane.showMessageDialog(settings.mainFrame,"ADD POINT ("+now.x+","+now.y+")");
                 settings.points.addElement(now);
             }
             setPreview(begin,now);
@@ -153,11 +152,12 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                 stringBuilder.append("("+point.x+","+point.y+")");
                 i++;
             }
-            JOptionPane.showMessageDialog(settings.mainFrame,stringBuilder.toString());
+//            JOptionPane.showMessageDialog(settings.mainFrame,stringBuilder.toString());
             itemsList.add(new DrawingPolygon(settings.color,
                     new Polygon(xpoints, ypoints, points.size()), settings.isFill(), settings.getStroke()));
 
             settings.setPoints(null);
+            drawingBoard.repaint();
         }
     }
 }
@@ -168,7 +168,7 @@ public class DrawingBoard extends JPanel  {
     BoardMouseListener listener;
     DrawingBoard(BoardSettings settings){
         this.settings=settings;
-        setSize(new Dimension(700,700));
+        setSize(new Dimension(700,470));
         itemsList=new LinkedList<>();
         listener=new BoardMouseListener(settings,itemsList,this);
         this.addMouseListener(listener);
@@ -187,6 +187,7 @@ public class DrawingBoard extends JPanel  {
         if(preview!=null) {
             preview.draw(g);
         }
+//        selectBoard.repaint(new Rectangle(0,0,700,30));
     }
 
 }
