@@ -262,7 +262,7 @@ public class MainForm extends JFrame{
             JOptionPane.showMessageDialog(this,"LOAD UI FAILED");
         }
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setSize(d.width, d.height);
+        this.setSize(d.width-100, d.height-100);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.setVisible(true);

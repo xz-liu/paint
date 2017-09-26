@@ -278,7 +278,6 @@ public class DrawingBoard extends JPanel  {
         listener=new BoardMouseListener(settings,itemsList,this);
         this.addMouseListener(listener);
         this.addMouseMotionListener(listener);
-        image= new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
     }
 
     public void clearBoard() {
@@ -300,6 +299,7 @@ public class DrawingBoard extends JPanel  {
     }
 
     public BufferedImage getImage() {
+        image= new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         Graphics g = image.createGraphics();
         g.fillRect(0, 0, image.getWidth(), image.getHeight());
         this.print(g);
