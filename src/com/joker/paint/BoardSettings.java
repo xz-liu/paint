@@ -9,7 +9,7 @@ import java.util.Vector;
  */
 public class BoardSettings {
     public enum Type{
-     POINTS,IMAGE,POLYGON,OVAL,RECT,TEXT,DELETE,MOVE,TOP,BOTTOM
+     POINTS,IMAGE,POLYGON,OVAL,RECT,TEXT,DELETE,MOVE,TOP,BOTTOM,LINES
     }
     Stroke stroke;
     Color color;

@@ -45,7 +45,10 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                 drawingBoard.setPreview(new DrawingShape(settings.color,new Ellipse2D.Float(xx,yy,disX,disY),false,dash));
                 break;
             case POINTS:
+                drawingBoard.setPreview(new DrawingPoints(settings.color,settings.getPoints().toArray(new Point[0]),settings.getStroke()));
+                break;
             case POLYGON:
+            case LINES:
                 drawingBoard.setPreview(new DrawingPoints(settings.color,settings.getPoints().toArray(new Point[0]),dash));
                 break;
             case TEXT:
@@ -97,6 +100,9 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         if (begin != null) {
             now = new Point(e.getPoint());
             if (settings.getType() == BoardSettings.Type.POLYGON) {
+                settings.points.addElement(now);
+                setPreview(begin, now);
+            }else if (settings.getType() == BoardSettings.Type.LINES) {
                 settings.points.addElement(now);
                 setPreview(begin, now);
             }
@@ -174,9 +180,9 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
             setPreview();
             drawingBoard.repaint();
         }
+        Vector<Point> points = settings.getPoints();
+        if(points==null||points.size()<=1)return;
         if (settings.getType() == BoardSettings.Type.POLYGON) {
-            Vector<Point> points = settings.getPoints();
-            if(points==null||points.size()<=1)return;
                 int[] xpoints = new int[points.size()], ypoints = new int[points.size()];
                 int i = 0;
                 for (Point point : points) {
@@ -187,6 +193,13 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
 //            JOptionPane.showMessageDialog(settings.mainFrame,stringBuilder.toString());
                 addListItem(new DrawingPolygon(settings.color,
                         new Polygon(xpoints, ypoints, points.size()), settings.isFill(), settings.getStroke()));
+                setPreview();
+            drawingBoard.repaint();
+        }
+        else if (settings.getType()== BoardSettings.Type.LINES){
+
+            addListItem(new DrawingLines(settings.getColor(),points.toArray(new Point[0]),settings.getStroke()));
+            setPreview();
             drawingBoard.repaint();
         }
     }

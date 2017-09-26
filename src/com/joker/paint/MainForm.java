@@ -28,7 +28,7 @@ public class MainForm extends JFrame{
     private DrawingBoard board;
     private JPanel mainPanel,select,history, historyMain;
     private BoardSettings settings;
-    private JButton buttonOpenImg,buttonDelete,buttonPoints,buttonPolygon,buttonOval,buttonRect,buttonText;
+    private JButton buttonOpenImg,buttonDelete,buttonPoints,buttonPolygon,buttonOval,buttonRect,buttonText,buttonLines;
     private JTextField textImput;
     private JButton buttonColor,buttonFont,buttonMove,buttonTop,buttonBottom,buttonSave;
     private JCheckBox checkBoxFill;
@@ -68,6 +68,11 @@ public class MainForm extends JFrame{
     }
     private void initButtons(){
         initChoose();
+        buttonLines=new JButton("Lines");
+        buttonLines.addActionListener(e->{
+            settings.setType(BoardSettings.Type.LINES);
+            settings.clearPoints();
+        });
         buttonPoints=new JButton("Pen");
         buttonPoints.addActionListener(e-> {
             settings.setType(BoardSettings.Type.POINTS);
@@ -173,6 +178,7 @@ public class MainForm extends JFrame{
         select.add(buttonFont);
         select.add(Box.createRigidArea(new Dimension(3,1)));
         select.add(buttonPoints);
+        select.add(buttonLines);
         select.add(buttonOval);
         select.add(buttonRect);
         select.add(buttonPolygon);
