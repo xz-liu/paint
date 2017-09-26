@@ -92,7 +92,7 @@ public class MainForm extends JFrame{
             fileChooser.setDialogTitle("Choose Image");
             fileChooser.setFileFilter(new FileNameExtensionFilter("Image Files","gif","png","jpg","bmp","jpeg"));
             while (fileChooser.showOpenDialog(this)!=JFileChooser.APPROVE_OPTION){
-                int confirmDialog = JOptionPane.showConfirmDialog(this, "Selection failed,continue?");
+                int confirmDialog = JOptionPane.showConfirmDialog(this, "Selection failed, continue?");
                 if(confirmDialog!=0){
                     return;
                 }

@@ -31,6 +31,6 @@ public class DrawingImage extends DrawingItem {
     @Override
     public DrawingItem createPreview() {
         return new DrawingShape(selectedColor,
-                new Rectangle(_pos.x,_pos.y,_pos.width,_pos.height),false,new BasicStroke(3f));
+                new Rectangle(_pos.x,_pos.y,_pos.width,_pos.height),false,new BasicStroke(6f));
     }
 }
