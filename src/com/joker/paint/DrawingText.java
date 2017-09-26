@@ -11,7 +11,14 @@ public class DrawingText extends DrawingItem {
     private Font font;
     private Color color;
     public DrawingText(String text, Point pos,Font font,Color color){
-        super(Type.TEXT);
+        super(Type.TEXT,false);
+        this.text=text;
+        this.font=font;
+        this.pos=pos;
+        this.color=color;
+    }
+    public DrawingText(String text, Point pos,Font font,Color color,boolean isPreview){
+        super(Type.TEXT,isPreview);
         this.text=text;
         this.font=font;
         this.pos=pos;
@@ -29,6 +36,6 @@ public class DrawingText extends DrawingItem {
     }
     @Override
     public DrawingItem createPreview() {
-        return new DrawingText(text,pos,font,selectedColor);
+        return new DrawingText(text,pos,font,selectedColor,true);
     }
 }

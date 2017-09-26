@@ -10,7 +10,13 @@ public class DrawingPoints extends DrawingItem {
     private Point[] _points;
     private Stroke _stroke;
     public DrawingPoints(Color color,Point[] points,Stroke stroke){
-        super(Type.SHAPE);
+        super(Type.SHAPE,false);
+        _color=color;
+        _points=points;
+        _stroke=stroke;
+    }
+    public DrawingPoints(Color color,Point[] points,Stroke stroke,boolean isPreview){
+        super(Type.SHAPE,isPreview);
         _color=color;
         _points=points;
         _stroke=stroke;
@@ -37,6 +43,6 @@ public class DrawingPoints extends DrawingItem {
 
     @Override
     public DrawingItem createPreview() {
-        return new DrawingPoints(selectedColor,_points,_stroke);
+        return new DrawingPoints(selectedColor,_points,_stroke,true);
     }
 }

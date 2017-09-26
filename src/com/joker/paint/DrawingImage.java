@@ -11,10 +11,16 @@ public class DrawingImage extends DrawingItem {
     private JFrame _imgObserver;
     private Rectangle _pos;
     public DrawingImage(Image image,Rectangle pos,JFrame imgObserver){
-       super(Type.IMAGE);
+       super(Type.IMAGE,false);
        _image=image;
        _pos=pos;
        _imgObserver=imgObserver;
+    }
+    public DrawingImage(Image image,Rectangle pos,JFrame imgObserver,boolean isPreview){
+        super(Type.IMAGE,isPreview);
+        _image=image;
+        _pos=pos;
+        _imgObserver=imgObserver;
     }
 
     @Override
@@ -31,6 +37,6 @@ public class DrawingImage extends DrawingItem {
     @Override
     public DrawingItem createPreview() {
         return new DrawingShape(selectedColor,
-                new Rectangle(_pos.x,_pos.y,_pos.width,_pos.height),false,new BasicStroke(6f));
+                new Rectangle(_pos.x,_pos.y,_pos.width,_pos.height),false,new BasicStroke(6f),true);
     }
 }

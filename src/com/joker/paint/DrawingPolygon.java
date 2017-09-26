@@ -12,12 +12,20 @@ public class DrawingPolygon extends DrawingItem {
     private boolean _fill;
     boolean _isPolygon;
     public DrawingPolygon(Color color,Polygon shape,boolean fill,Stroke stroke){
-        super(Type.POLYGON);
+        super(Type.POLYGON,false);
         _color=color;
         _shape=shape;
         _fill=fill;
         _stroke=fill?null:stroke;
     }
+    public DrawingPolygon(Color color,Polygon shape,boolean fill,Stroke stroke,boolean isPreview){
+        super(Type.POLYGON,isPreview);
+        _color=color;
+        _shape=shape;
+        _fill=fill;
+        _stroke=fill?null:stroke;
+    }
+
     public void reposition(Point pos) {
         Point delta=new Point(pos.x-_shape.xpoints[0],pos.y-_shape.ypoints[0]);
         for(int i=0;i<_shape.npoints;i++){
@@ -38,6 +46,6 @@ public class DrawingPolygon extends DrawingItem {
 
     @Override
     public DrawingItem createPreview() {
-        return new DrawingPolygon(selectedColor,_shape,_fill,_stroke);
+        return new DrawingPolygon(selectedColor,_shape,_fill,_stroke,true);
     }
 }

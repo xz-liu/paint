@@ -170,6 +170,10 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+        if(drawingBoard.getPreview()!=null&&drawingBoard.getPreview().isSelectedPreview()){
+            setPreview();
+            drawingBoard.repaint();
+        }
         if (settings.getType() == BoardSettings.Type.POLYGON) {
             Vector<Point> points = settings.getPoints();
             if(points==null||points.size()<=1)return;

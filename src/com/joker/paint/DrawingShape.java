@@ -11,8 +11,15 @@ public class DrawingShape extends DrawingItem {
     private Shape _shape;
     private Stroke _stroke;
     private boolean _fill;
+    public DrawingShape(Color color,Shape shape,boolean fill,Stroke stroke,boolean isPreview){
+        super(Type.SHAPE,isPreview);
+        _color=color;
+        _shape=shape;
+        _fill=fill;
+        _stroke=fill?null:stroke;
+    }
     public DrawingShape(Color color,Shape shape,boolean fill,Stroke stroke){
-        super(Type.SHAPE);
+        super(Type.SHAPE,false);
         _color=color;
         _shape=shape;
         _fill=fill;
@@ -45,6 +52,6 @@ public class DrawingShape extends DrawingItem {
 
     @Override
     public DrawingItem createPreview() {
-        return new DrawingShape(selectedColor,_shape,_fill,_stroke);
+        return new DrawingShape(selectedColor,_shape,_fill,_stroke,true);
     }
 }
