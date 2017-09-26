@@ -5,6 +5,7 @@ import external.StrokeChooserPanel;
 import external.StrokeSample;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ColorPicker;
+//import napkin.NapkinLookAndFeel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -50,16 +51,26 @@ public class MainForm extends JFrame{
                 new StrokeSample(new BasicStroke(10f)),
                 new StrokeSample(new BasicStroke(11f)),
                 new StrokeSample(new BasicStroke(12f)),
-                new StrokeSample(new BasicStroke(1f, BasicStroke.CAP_BUTT,
-                        BasicStroke.JOIN_ROUND, 1f, new float[]{15, 10,},
+                new StrokeSample(new BasicStroke(1.5f, BasicStroke.CAP_BUTT,
+                        BasicStroke.JOIN_ROUND, 2.5f, new float[]{15, 10,},
                         0f)),
                 new StrokeSample(new BasicStroke(2.5f, BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_ROUND, 3.5f, new float[]{15, 10,},
                 0f)),
                 new StrokeSample(new BasicStroke(3.5f, BasicStroke.CAP_BUTT,
-                        BasicStroke.JOIN_ROUND, 3.5f, new float[]{15, 10,},
+                        BasicStroke.JOIN_ROUND, 4.5f, new float[]{15, 10,},
+                        0f)),
+                new StrokeSample(new BasicStroke(4.5f, BasicStroke.CAP_BUTT,
+                        BasicStroke.JOIN_ROUND, 5.5f, new float[]{15, 10,},
                         0f)),
 
+                new StrokeSample(new BasicStroke(5.5f, BasicStroke.CAP_BUTT,
+                        BasicStroke.JOIN_ROUND, 6.5f, new float[]{15, 10,},
+                        0f)),
+
+                new StrokeSample(new BasicStroke(6.5f, BasicStroke.CAP_BUTT,
+                        BasicStroke.JOIN_ROUND, 7.5f, new float[]{15, 10,},
+                        0f)),
         };
         strokeChooserPanel = new StrokeChooserPanel(new StrokeSample(new BasicStroke(3f)), samples);
         strokeChooserPanel.addSelectorListener(e->{
@@ -235,10 +246,12 @@ public class MainForm extends JFrame{
     public  MainForm(){
         try {
             this.setUndecorated(false);
+//            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//            UIManager.setLookAndFeel(new NapkinLookAndFeel());
             SwingUtilities.updateComponentTreeUI(this);
         }catch (Exception e){
-            JOptionPane.showMessageDialog(this,"LOAD NAPKIN FAILED");
+            JOptionPane.showMessageDialog(this,"LOAD UI FAILED");
         }
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         this.setSize(d.width, d.height);

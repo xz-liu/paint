@@ -22,7 +22,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
     BoardSettings settings;
     DrawingBoard drawingBoard;
     LinkedList<DrawingItem> itemsList;
-    LinkedList<JButton> buttons;
+//    LinkedList<JButton> buttons;
     Point begin, now, end;
     Stroke dash;
     private void setPreview(){
@@ -42,7 +42,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                 drawingBoard.setPreview(new DrawingShape(settings.color,new Rectangle(xx,yy,disX,disY),false,dash));
                 break;
             case OVAL:
-                drawingBoard.setPreview(new DrawingShape(settings.color,new Ellipse2D.Float(xx,yy,disX,disY),false,dash));
+                drawingBoard.setPreview(new DrawingShape(settings.color,new Ellipse2D.Double(xx,yy,disX,disY),false,dash));
                 break;
             case POINTS:
                 drawingBoard.setPreview(new DrawingPoints(settings.color,settings.getPoints().toArray(new Point[0]),settings.getStroke()));
@@ -71,7 +71,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         this.dash = new BasicStroke(2.5f, BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_ROUND, 3.5f, new float[]{15, 10,},
                 0f);
-        this.buttons=new LinkedList<>();
+//        this.buttons=new LinkedList<>();
     }
 
     @Override
