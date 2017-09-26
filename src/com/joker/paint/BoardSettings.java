@@ -9,7 +9,7 @@ import java.util.Vector;
  */
 public class BoardSettings {
     public enum Type{
-     POINTS,IMAGE,POLYGON,OVAL,RECT,TEXT,DELETE,MOVE
+     POINTS,IMAGE,POLYGON,OVAL,RECT,TEXT,DELETE,MOVE,TOP,BOTTOM
     }
     Stroke stroke;
     Color color;
@@ -21,6 +21,11 @@ public class BoardSettings {
     MainForm mainFrame;
     JPanel history;
     DrawingItem itemReplacing;
+
+    public MainForm getMainFrame() {
+        return mainFrame;
+    }
+
     public void replace(Point pos){
         if (getItemReplacing()!=null){
             getItemReplacing().reposition(pos);

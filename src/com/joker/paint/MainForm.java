@@ -3,31 +3,29 @@ package com.joker.paint;
 import external.JFontChooser;
 import external.StrokeChooserPanel;
 import external.StrokeSample;
-import javafx.beans.property.SetProperty;
-import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.TextAction;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
 import java.io.File;
-import java.io.FileFilter;
+import java.io.IOException;
 
 /**
  * Created by Adam on 2017/9/15.
  */
 public class MainForm extends JFrame{
     private DrawingBoard board;
-    private JPanel mainPanel,select,history;
+    private JPanel mainPanel,select,history, historyMain;
     private BoardSettings settings;
     private JButton buttonOpenImg,buttonDelete,buttonPoints,buttonPolygon,buttonOval,buttonRect,buttonText;
     private JTextField textImput;
-    private JButton buttonColor,buttonFont,buttonMove,buttonSave;
+    private JButton buttonColor,buttonFont,buttonMove,buttonTop,buttonBottom,buttonSave;
     private JCheckBox checkBoxFill;
     private StrokeChooserPanel strokeChooserPanel;
     public JPanel getHistory() {
@@ -80,11 +78,6 @@ public class MainForm extends JFrame{
             settings.setType(BoardSettings.Type.POLYGON);
             settings.clearPoints();
         });
-        buttonDelete=new JButton("Del");
-        buttonDelete.addActionListener(e-> {
-            settings.setType(BoardSettings.Type.DELETE);
-            settings.clearPoints();
-        });
         buttonOpenImg=new JButton("Image");
         buttonOpenImg.addActionListener(e-> {
             settings.setType(BoardSettings.Type.IMAGE);
@@ -130,11 +123,6 @@ public class MainForm extends JFrame{
         });
 
 
-        buttonMove=new JButton("Move");
-        buttonMove.addActionListener(e->{
-            settings.setType(BoardSettings.Type.MOVE);
-        });
-
         textImput=new JTextField(15);
         textImput.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -155,11 +143,26 @@ public class MainForm extends JFrame{
                     settings.setText(textImput.getText());
             }
         });
+        buttonSave=new JButton("Save");
+        buttonSave.addActionListener(e->{
+            BufferedImage image=board.getImage();
+            JFileChooser fileChooser = new JFileChooser();
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                // save to file
+                try {
+                    ImageIO.write(image, "jpg", file);
+                }catch (IOException ioe){
+                    JOptionPane.showMessageDialog(this,"Save Failed");
+                }
+            }
+        });
 
         checkBoxFill=new JCheckBox("Fill");
         checkBoxFill.addActionListener(e->{
             settings.setFill(checkBoxFill.isSelected());
         });
+        select.add(buttonSave);
         select.add(strokeChooserPanel);
         select.add(buttonColor);
         select.add(buttonFont);
@@ -169,12 +172,54 @@ public class MainForm extends JFrame{
         select.add(buttonRect);
         select.add(buttonPolygon);
         select.add(checkBoxFill);
-        select.add(buttonDelete);
-        select.add(buttonMove);
         select.add(textImput);
         select.add(buttonText);
         select.add(buttonOpenImg);
 
+    }
+    private void initHistory(){
+
+        buttonTop=new JButton("Top");
+        buttonTop.addActionListener(e->{
+            settings.setType(BoardSettings.Type.TOP);
+            settings.clearPoints();
+        });
+        buttonBottom=new JButton("Bottom");
+        buttonBottom.addActionListener(e->{
+            settings.setType(BoardSettings.Type.BOTTOM);
+            settings.clearPoints();
+        });
+        buttonDelete=new JButton("Del");
+        buttonDelete.addActionListener(e-> {
+            settings.setType(BoardSettings.Type.DELETE);
+            settings.clearPoints();
+        });
+        buttonMove=new JButton("Move");
+        buttonMove.addActionListener(e->{
+            settings.setType(BoardSettings.Type.MOVE);
+            settings.clearPoints();
+        });
+
+        historyMain =new JPanel();
+        historyMain.setLayout(new BoxLayout(historyMain,BoxLayout.PAGE_AXIS));
+        JPanel historyOptions=new JPanel();
+        historyOptions.setLayout(new BorderLayout());
+        historyOptions.add(buttonTop,BorderLayout.NORTH);
+        historyOptions.add(buttonBottom,BorderLayout.SOUTH);
+        historyOptions.add(buttonMove,BorderLayout.EAST);
+        historyOptions.add(buttonDelete,BorderLayout.WEST);
+
+        historyMain.add(historyOptions);
+
+        history=new JPanel();
+        JScrollPane historyScroll=new JScrollPane(history);
+
+        historyScroll.setBounds(0,0,0,50);
+        history.setAutoscrolls(true);
+        historyScroll.setPreferredSize(new Dimension(80,700));
+        history.setSize(new Dimension(100,700));
+        history.setLayout(new BoxLayout(history,BoxLayout.PAGE_AXIS));
+        historyMain.add(historyScroll);
     }
     public  MainForm(){
         try {
@@ -192,25 +237,18 @@ public class MainForm extends JFrame{
         this.setTitle("Paint");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainPanel=new JPanel();
-        mainPanel.setSize(new Dimension(700,500));
+        mainPanel.setSize(d);
         mainPanel.setLayout(new BorderLayout(1,1));
         select=new JPanel();
-        history=new JPanel();
-        JScrollPane historyScroll=new JScrollPane(history);
-
-        historyScroll.setBounds(0,0,0,50);
-        history.setAutoscrolls(true);
-        historyScroll.setPreferredSize(new Dimension(80,700));
-        history.setSize(new Dimension(100,700));
-        history.setLayout(new BoxLayout(history,BoxLayout.PAGE_AXIS));
+        initHistory();
         select.setSize(new Dimension(700,30));
         settings=new BoardSettings(this);
-        board=new DrawingBoard(settings);
+        board=new DrawingBoard(settings,new Dimension(d.width-historyMain.getWidth(),d.height-historyMain.getHeight()));
         initButtons();
         mainPanel.add(board);
         mainPanel.add(select,BorderLayout.NORTH);
 //        mainPanel.add(history,BorderLayout.WEST);
-        mainPanel.add(historyScroll,BorderLayout.WEST);
+        mainPanel.add(historyMain,BorderLayout.WEST);
         this.add(mainPanel);
         select.revalidate();
     }

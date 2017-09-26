@@ -8,8 +8,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Vector;
+import java.util.function.Function;
 
 /**
  * Created by Adam on 2017/9/15.
@@ -183,23 +186,50 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
             drawingBoard.repaint();
         }
     }
+    private void swapItems(DrawingItem item1,boolean isFirst){
+        itemsList.remove(item1);
+        if (isFirst){
+            itemsList.addFirst(item1);
+        }else {
+            itemsList.addLast(item1);
+        }
+    }
     private void addListItem(DrawingItem item) {
         if (settings.getPoints() != null) {
             itemsList.add(item);
             HistoryButton button=new HistoryButton(settings.getType().toString(),item);
             final ActionListener listener=e->{
-                if(settings.getType()== BoardSettings.Type.DELETE){
-                    itemsList.remove(button.item);
-                    settings.getHistory().remove(button);
-                    settings.getHistory().revalidate();
-                    settings.getHistory().repaint();
-                    setPreview();
-                }else if(settings.getType()== BoardSettings.Type.MOVE){
-                    setPreview(button.item.createPreview());
-                    settings.setItemReplacing(button.item);
-                }
-                else {
-                    setPreview(button.item.createPreview());
+                switch (settings.getType()) {
+                    case DELETE:
+                        itemsList.remove(button.item);
+                        settings.getHistory().remove(button);
+                        settings.getHistory().revalidate();
+                        settings.getHistory().repaint();
+                        setPreview();
+                        break;
+                    case BOTTOM:
+                        swapItems(button.item,true);
+                        settings.getHistory().remove(button);
+                        settings.getHistory().add(button,0);
+                        settings.getHistory().revalidate();
+                        settings.getHistory().repaint();
+                        setPreview();
+                        break;
+                    case TOP:
+                        swapItems(button.item,false);
+                        settings.getHistory().remove(button);
+                        settings.getHistory().add(button);
+                        settings.getHistory().revalidate();
+                        settings.getHistory().repaint();
+                        setPreview();
+                        break;
+                    case MOVE:
+                        setPreview(button.item.createPreview());
+                        settings.setItemReplacing(button.item);
+                    default:
+                        setPreview(button.item.createPreview());
+                        break;
+
                 }
                 drawingBoard.repaint();
             };
@@ -222,13 +252,14 @@ public class DrawingBoard extends JPanel  {
     LinkedList<DrawingItem> itemsList;
     DrawingItem preview;
     BoardMouseListener listener;
-    DrawingBoard(BoardSettings settings){
+    DrawingBoard(BoardSettings settings,Dimension dimension){
         this.settings=settings;
-        setSize(new Dimension(700,470));
+        setSize(dimension);
         itemsList=new LinkedList<>();
         listener=new BoardMouseListener(settings,itemsList,this);
         this.addMouseListener(listener);
         this.addMouseMotionListener(listener);
+        image= new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
     }
     void setPreview(DrawingItem item){
         this.preview=item;
@@ -236,6 +267,14 @@ public class DrawingBoard extends JPanel  {
 
     public DrawingItem getPreview() {
         return preview;
+    }
+    private BufferedImage image;
+
+    public BufferedImage getImage() {
+        Graphics g = image.createGraphics();
+        g.fillRect(0, 0, image.getWidth(), image.getHeight());
+        this.print(g);
+        return image;
     }
 
     @Override
