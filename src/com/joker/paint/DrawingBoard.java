@@ -172,17 +172,17 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
     public void mouseExited(MouseEvent e) {
         if (settings.getType() == BoardSettings.Type.POLYGON) {
             Vector<Point> points = settings.getPoints();
-            if(points==null||points.isEmpty())return;
-            int[] xpoints = new int[points.size()], ypoints = new int[points.size()];
-            int i = 0;
-            for (Point point : points) {
-                xpoints[i] = (point.x);
-                ypoints[i] = (point.y);
-                i++;
-            }
+            if(points==null||points.size()<=1)return;
+                int[] xpoints = new int[points.size()], ypoints = new int[points.size()];
+                int i = 0;
+                for (Point point : points) {
+                    xpoints[i] = (point.x);
+                    ypoints[i] = (point.y);
+                    i++;
+                }
 //            JOptionPane.showMessageDialog(settings.mainFrame,stringBuilder.toString());
-            addListItem(new DrawingPolygon(settings.color,
-                    new Polygon(xpoints, ypoints, points.size()), settings.isFill(), settings.getStroke()));
+                addListItem(new DrawingPolygon(settings.color,
+                        new Polygon(xpoints, ypoints, points.size()), settings.isFill(), settings.getStroke()));
             drawingBoard.repaint();
         }
     }
@@ -252,6 +252,8 @@ public class DrawingBoard extends JPanel  {
     LinkedList<DrawingItem> itemsList;
     DrawingItem preview;
     BoardMouseListener listener;
+
+    private BufferedImage image;
     DrawingBoard(BoardSettings settings,Dimension dimension){
         this.settings=settings;
         setSize(dimension);
@@ -261,14 +263,14 @@ public class DrawingBoard extends JPanel  {
         this.addMouseMotionListener(listener);
         image= new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
     }
+
+
     void setPreview(DrawingItem item){
         this.preview=item;
     }
-
     public DrawingItem getPreview() {
         return preview;
     }
-    private BufferedImage image;
 
     public BufferedImage getImage() {
         Graphics g = image.createGraphics();
@@ -280,6 +282,7 @@ public class DrawingBoard extends JPanel  {
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+
         if(itemsList!=null)
             for(DrawingItem items:itemsList) {
                 items.draw(g);
