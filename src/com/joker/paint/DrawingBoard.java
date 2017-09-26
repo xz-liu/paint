@@ -281,6 +281,16 @@ public class DrawingBoard extends JPanel  {
         image= new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
     }
 
+    public void clearBoard() {
+        if (JOptionPane.showConfirmDialog(settings.getMainFrame(),
+                "Clear the paint board and discard all changes?") == 0) {
+            itemsList.clear();
+            settings.getHistory().removeAll();
+            repaint();
+            settings.getHistory().revalidate();
+            settings.getHistory().repaint();
+        }
+    }
 
     void setPreview(DrawingItem item){
         this.preview=item;

@@ -15,6 +15,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
@@ -31,7 +33,7 @@ public class MainForm extends JFrame{
     private BoardSettings settings;
     private JButton buttonOpenImg,buttonDelete,buttonPoints,buttonPolygon,buttonOval,buttonRect,buttonText,buttonLines;
     private JTextField textImput;
-    private JButton buttonColor,buttonFont,buttonMove,buttonTop,buttonBottom,buttonSave;
+    private JButton buttonColor,buttonFont,buttonClear,buttonMove,buttonTop,buttonBottom,buttonSave;
     private JCheckBox checkBoxFill;
     private StrokeChooserPanel strokeChooserPanel;
     public JPanel getHistory() {
@@ -143,6 +145,11 @@ public class MainForm extends JFrame{
             settings.setFont(fontChooser.getSelectedFont());
         });
 
+        buttonClear=new JButton("Clear");
+        buttonClear.addActionListener(e->{
+            board.clearBoard();
+        });
+
 
         textImput=new JTextField(15);
         textImput.getDocument().addDocumentListener(new DocumentListener() {
@@ -197,6 +204,7 @@ public class MainForm extends JFrame{
         select.add(textImput);
         select.add(buttonText);
         select.add(buttonOpenImg);
+        select.add(buttonClear);
 
     }
     private void initHistory(){
@@ -259,7 +267,18 @@ public class MainForm extends JFrame{
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.setTitle("Paint");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (JOptionPane.showConfirmDialog(settings.getMainFrame(),
+                        "Discard all changes?") == 0) {
+                    e.getWindow().dispose();
+                    System.exit(0);
+                }
+            }
+        });
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         mainPanel=new JPanel();
         mainPanel.setSize(d);
         mainPanel.setLayout(new BorderLayout(1,1));
