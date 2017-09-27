@@ -279,7 +279,8 @@ public class DrawingBoard extends JPanel  {
                 "Clear the paint board and discard all changes?") == 0) {
             itemsList.clear();
             settings.getHistory().removeAll();
-            repaint();
+            this.setPreview(null);
+            this.repaint();
             settings.getHistory().revalidate();
             settings.getHistory().repaint();
         }
@@ -296,6 +297,8 @@ public class DrawingBoard extends JPanel  {
         image= new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         Graphics g = image.createGraphics();
         g.fillRect(0, 0, image.getWidth(), image.getHeight());
+        this.setPreview(null);
+        this.repaint();
         this.print(g);
         return image;
     }
