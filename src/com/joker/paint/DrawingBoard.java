@@ -9,10 +9,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Vector;
-import java.util.function.Function;
 
 /**
  * Created by Adam on 2017/9/15.
@@ -176,10 +174,10 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
-        if(drawingBoard.getPreview()!=null&&drawingBoard.getPreview().isSelectedPreview()){
-            setPreview();
-            drawingBoard.repaint();
-        }
+//        if(drawingBoard.getPreview()!=null&&drawingBoard.getPreview().isSelectedPreview()){
+//            setPreview();
+//            drawingBoard.repaint();
+//        }
         Vector<Point> points = settings.getPoints();
         if(points==null||points.size()<=1)return;
         if (settings.getType() == BoardSettings.Type.POLYGON) {
@@ -220,24 +218,18 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                     case DELETE:
                         itemsList.remove(button.item);
                         settings.getHistory().remove(button);
-                        settings.getHistory().revalidate();
-                        settings.getHistory().repaint();
                         setPreview();
                         break;
                     case BOTTOM:
                         swapItems(button.item,true);
                         settings.getHistory().remove(button);
                         settings.getHistory().add(button,0);
-                        settings.getHistory().revalidate();
-                        settings.getHistory().repaint();
                         setPreview();
                         break;
                     case TOP:
                         swapItems(button.item,false);
                         settings.getHistory().remove(button);
                         settings.getHistory().add(button);
-                        settings.getHistory().revalidate();
-                        settings.getHistory().repaint();
                         setPreview();
                         break;
                     case MOVE:
@@ -248,6 +240,8 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                         break;
 
                 }
+                settings.getHistory().revalidate();
+                settings.getHistory().repaint();
                 drawingBoard.repaint();
             };
             button.addActionListener(listener);
