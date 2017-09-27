@@ -174,10 +174,12 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
-//        if(drawingBoard.getPreview()!=null&&drawingBoard.getPreview().isSelectedPreview()){
-//            setPreview();
-//            drawingBoard.repaint();
-//        }
+        if(drawingBoard.getPreview()!=null
+                &&drawingBoard.getPreview().isSelectedPreview()
+                &&settings.getType()!= BoardSettings.Type.MOVE){
+            setPreview();
+            drawingBoard.repaint();
+        }
         Vector<Point> points = settings.getPoints();
         if(points==null||points.size()<=1)return;
         if (settings.getType() == BoardSettings.Type.POLYGON) {
@@ -304,7 +306,7 @@ public class DrawingBoard extends JPanel  {
     }
 
     @Override
-    public void paintComponent(Graphics g){
+    public void paint(Graphics g){
         super.paintComponent(g);
 
         if(itemsList!=null)
