@@ -102,10 +102,10 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         if (begin != null) {
             if (settings.getType() == BoardSettings.Type.POLYGON) {
                 settings.getPoints().addElement(now);
-                System.out.println("clicked1");
+//                System.out.println("clicked1");
                 setPreview(begin, now);
             }else if (settings.getType() == BoardSettings.Type.LINES) {
-                System.out.println("clicked2");
+//                System.out.println("clicked2");
                 settings.getPoints().addElement(now);
                 setPreview(begin, now);
             }
@@ -137,7 +137,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         } else if (settings.getType()!= BoardSettings.Type.POLYGON&&
                 settings.getType()!= BoardSettings.Type.LINES){
             settings.getPoints().addElement(begin);
-            System.out.println("pressed");
+//            System.out.println("pressed");
         }
     }
 
@@ -149,7 +149,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                     settings.getType()!= BoardSettings.Type.LINES) {
                 settings.getPoints().addElement(end);
 
-                System.out.println("released");
+//                System.out.println("released");
             }
             Vector<Point> points = settings.getPoints();
             if(points.isEmpty())return;
