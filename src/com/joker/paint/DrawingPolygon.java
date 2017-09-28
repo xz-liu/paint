@@ -1,6 +1,7 @@
 package com.joker.paint;
 
 import java.awt.*;
+import java.util.Vector;
 
 /**
  * Created by Adam on 2017/9/24.
@@ -17,6 +18,7 @@ public class DrawingPolygon extends DrawingItem {
         _shape=shape;
         _fill=fill;
         _stroke=fill?null:stroke;
+        initResizePoint();
     }
     public DrawingPolygon(Color color,Polygon shape,boolean fill,Stroke stroke,boolean isPreview){
         super(Type.POLYGON,isPreview);
@@ -24,6 +26,7 @@ public class DrawingPolygon extends DrawingItem {
         _shape=shape;
         _fill=fill;
         _stroke=fill?null:stroke;
+        initResizePoint();
     }
 
     public void reposition(Point pos) {
@@ -42,6 +45,22 @@ public class DrawingPolygon extends DrawingItem {
             graphics2D.setStroke(_stroke);
             graphics2D.drawPolygon(_shape);
         }
+    }
+
+    @Override
+    public void resize(int resizePointRank, Point posTo) {
+        _shape.xpoints[resizePointRank]=posTo.x;
+        _shape.ypoints[resizePointRank]=posTo.y;
+        resizePoint.reposition(null);
+    }
+
+    @Override
+    public Vector<Point> getResizePoints() {
+        Vector<Point> points=new Vector<>();
+        for(int i=0;i<_shape.npoints;i++){
+            points.add(new Point(_shape.xpoints[i],_shape.ypoints[i]));
+        }
+        return points;
     }
 
     @Override

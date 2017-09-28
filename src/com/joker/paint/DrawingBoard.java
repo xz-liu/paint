@@ -10,6 +10,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Vector;
 
 /**
@@ -79,6 +80,9 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
             settings.getPoints().addElement(now);
             setPreview(begin, now);
         }
+        else if(settings.getType()== BoardSettings.Type.SELECT){
+            settings.getPointNow().getItem().resize(settings.getSelectPoint(),now);
+        }
         else if (settings.getType() != BoardSettings.Type.MOVE)
             setPreview(begin, now);
         else {
@@ -94,14 +98,15 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        now = new Point(e.getPoint());
         if (begin != null) {
-            now = new Point(e.getPoint());
             if (settings.getType() == BoardSettings.Type.POLYGON) {
-                settings.points.addElement(now);
+                settings.getPoints().addElement(now);
+                System.out.println("clicked1");
                 setPreview(begin, now);
             }else if (settings.getType() == BoardSettings.Type.LINES) {
-                settings.points.addElement(now);
+                System.out.println("clicked2");
+                settings.getPoints().addElement(now);
                 setPreview(begin, now);
             }
             else if (settings.getType() != BoardSettings.Type.MOVE)
@@ -115,16 +120,39 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-            begin = new Point(e.getPoint());
+        begin = new Point(e.getPoint());
+        if (settings.getType() == BoardSettings.Type.SELECT) {
+            for (ListIterator<DrawingItem> iter =
+                 itemsList.listIterator(itemsList.size()); iter.hasPrevious(); ) {
+                DrawingItem item = iter.previous();
+                int result;
+                if ((result = item.getResizePoint().selected(begin)) >= 0) {
+                    settings.nextResizePoint(item.getResizePoint());
+//                JOptionPane.showMessageDialog(null,result);
+                    settings.setSelectPoint(result);
+                    break;
+                }
+                drawingBoard.repaint();
+            }
+        } else if (settings.getType()!= BoardSettings.Type.POLYGON&&
+                settings.getType()!= BoardSettings.Type.LINES){
             settings.getPoints().addElement(begin);
+            System.out.println("pressed");
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         if (begin != null) {
             end = new Point(e.getPoint());
-            settings.getPoints().addElement(end);
+            if (settings.getType()!= BoardSettings.Type.POLYGON&&
+                    settings.getType()!= BoardSettings.Type.LINES) {
+                settings.getPoints().addElement(end);
+
+                System.out.println("released");
+            }
             Vector<Point> points = settings.getPoints();
+            if(points.isEmpty())return;
             double xx = Math.min(points.firstElement().x, points.lastElement().x),
                     yy = Math.min(points.firstElement().y, points.lastElement().y),
                     disX = Math.abs(points.firstElement().x - points.lastElement().x),
@@ -152,7 +180,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                     setPreview();
                     break;
                 case TEXT:
-                    addListItem(new DrawingText(settings.getText(),end,settings.getFont(),settings.getColor()));
+                    addListItem(new DrawingText(settings.getText(), end, settings.getFont(), settings.getColor()));
                     setPreview();
                     break;
                 case MOVE:
@@ -296,8 +324,11 @@ public class DrawingBoard extends JPanel  {
     }
 
     public BufferedImage getImage() {
-        image= new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+        image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         Graphics g = image.createGraphics();
+        /*
+
+         */
         g.fillRect(0, 0, image.getWidth(), image.getHeight());
         this.setPreview(null);
         this.repaint();
@@ -309,13 +340,20 @@ public class DrawingBoard extends JPanel  {
     public void paint(Graphics g){
         super.paintComponent(g);
 
-        if(itemsList!=null)
-            for(DrawingItem items:itemsList) {
+        if(itemsList != null)
+            for(DrawingItem items : itemsList) {
                 items.draw(g);
             }
+
         if(preview!=null) {
             preview.draw(g);
         }
+        if(settings.getType()== BoardSettings.Type.SELECT&&
+                itemsList != null)
+            for(DrawingItem items : itemsList) {
+                items.getResizePoint().draw(g);
+            }
+
 //        selectBoard.repaint(new Rectangle(0,0,700,30));
     }
 

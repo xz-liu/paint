@@ -5,6 +5,7 @@ import external.StrokeChooserPanel;
 import external.StrokeSample;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ColorPicker;
+import napkin.NapkinLookAndFeel;
 //import napkin.NapkinLookAndFeel;
 
 import javax.imageio.ImageIO;
@@ -30,7 +31,7 @@ public class MainForm extends JFrame{
     private BoardSettings settings;
     private JButton buttonOpenImg,buttonDelete,buttonPoints,buttonPolygon,buttonOval,buttonRect,buttonText,buttonLines;
     private JTextField textImput;
-    private JButton buttonColor,buttonFont,buttonClear,buttonMove,buttonTop,buttonBottom,buttonSave;
+    private JButton buttonColor,buttonFont,buttonClear,buttonMove,buttonTop,buttonBottom,buttonSave,buttonSelect;
     private JCheckBox checkBoxFill;
     private StrokeChooserPanel strokeChooserPanel;
     public JPanel getHistory() {
@@ -78,6 +79,12 @@ public class MainForm extends JFrame{
     }
     private void initButtons(){
         initChoose();
+        buttonSelect=new JButton("Select");
+        buttonSelect.addActionListener(e->{
+            settings.setType(BoardSettings.Type.SELECT);
+            settings.clearPoints();
+            settings.nextResizePoint(null);
+        });
         buttonLines=new JButton("Lines");
         buttonLines.addActionListener(e->{
             settings.setType(BoardSettings.Type.LINES);
@@ -131,7 +138,7 @@ public class MainForm extends JFrame{
 
         buttonColor=new JButton("Color");
         buttonColor.addActionListener(e->{
-            Color color=JColorChooser.showDialog(settings.mainFrame,"Choose Color",Color.BLACK);
+            Color color=JColorChooser.showDialog(null,"Choose Color", Color.BLACK);
             settings.setColor(color);
         });
 
@@ -190,17 +197,18 @@ public class MainForm extends JFrame{
         select.add(buttonSave);
         select.add(strokeChooserPanel);
         select.add(buttonColor);
-        select.add(buttonFont);
+        select.add(buttonSelect);
         select.add(Box.createRigidArea(new Dimension(3,1)));
+        select.add(buttonOpenImg);
         select.add(buttonPoints);
         select.add(buttonLines);
         select.add(buttonOval);
         select.add(buttonRect);
         select.add(buttonPolygon);
         select.add(checkBoxFill);
+        select.add(buttonFont);
         select.add(textImput);
         select.add(buttonText);
-        select.add(buttonOpenImg);
         select.add(buttonClear);
 
     }
@@ -258,6 +266,7 @@ public class MainForm extends JFrame{
         }catch (Exception e){
             JOptionPane.showMessageDialog(this,"LOAD UI FAILED");
         }
+
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         this.setSize(d.width-100, d.height-100);
         this.setVisible(true);

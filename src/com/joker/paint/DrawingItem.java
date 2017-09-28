@@ -1,6 +1,7 @@
 package com.joker.paint;
 
 import java.awt.*;
+import java.util.Vector;
 
 /**
  * Created by Adam on 2017/9/15.
@@ -8,10 +9,11 @@ import java.awt.*;
 public abstract class DrawingItem {
 
     public enum Type{
-        IMAGE,TEXT,SHAPE,POINTS,POLYGON
+        IMAGE,TEXT,SHAPE,POINTS,POLYGON,RESIZEPOINT
     }
     protected Type _type;
-
+    protected ResizePoint resizePoint;
+   //  private Rectangle rectSelect;
     public boolean isSelectedPreview() {
         return selectedPreview;
     }
@@ -33,10 +35,18 @@ public abstract class DrawingItem {
         _type=type;
         selectedPreview =isPreview;
     }
+    protected void initResizePoint(){
+        resizePoint=new ResizePoint(this);
+    }
+
+    public ResizePoint getResizePoint() {
+        return resizePoint;
+    }
+    public abstract void resize(int resizePointRank,Point posTo);
+
     public abstract void reposition(Point pos);
     public abstract void draw(Graphics g);
-
+//    public abstract Rectangle getRectSelect();
+    public abstract Vector<Point> getResizePoints();
     public abstract DrawingItem createPreview();
-
-
 }

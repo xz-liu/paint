@@ -9,7 +9,7 @@ import java.util.Vector;
  */
 public class BoardSettings {
     public enum Type{
-     POINTS,IMAGE,POLYGON,OVAL,RECT,TEXT,DELETE,MOVE,TOP,BOTTOM,LINES
+     POINTS,IMAGE,POLYGON,OVAL,RECT,TEXT,DELETE,MOVE,TOP,BOTTOM,LINES,SELECT
     }
     Stroke stroke;
     Color color;
@@ -21,9 +21,28 @@ public class BoardSettings {
     MainForm mainFrame;
     JPanel history;
     DrawingItem itemReplacing;
-
+    ResizePoint pointNow;
+    int selectPoint;
+    public int getSelectPoint(){return selectPoint;}
+    public void setSelectPoint(int i){
+        selectPoint=i;
+    }
     public MainForm getMainFrame() {
         return mainFrame;
+    }
+
+    public ResizePoint getPointNow() {
+        return pointNow;
+    }
+
+    public void nextResizePoint(ResizePoint pointNext){
+        if(pointNow!=null){
+            pointNow.setShow(false);
+        }
+        if(pointNext!=null){
+            pointNext.setShow(true);
+        }
+        pointNow=pointNext;
     }
 
     public void replace(Point pos){
@@ -58,6 +77,7 @@ public class BoardSettings {
         this.font=new JLabel().getFont();
         this.text="";
         this.itemReplacing=null;
+        pointNow=null;
     }
     public void clearPoints(){
         setPoints(null);

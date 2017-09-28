@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="napkin" level="project" />
+    <orderEntry type="library" name="SwingSets2(BeautyEyeLNFDemo)" level="project" />
   </component>
 </module>

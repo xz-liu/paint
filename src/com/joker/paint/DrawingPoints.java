@@ -1,6 +1,8 @@
 package com.joker.paint;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Vector;
 
 /**
  * Created by Adam on 2017/9/22.
@@ -14,13 +16,29 @@ public class DrawingPoints extends DrawingItem {
         _color=color;
         _points=points;
         _stroke=stroke;
+        initResizePoint();
     }
     public DrawingPoints(Color color,Point[] points,Stroke stroke,boolean isPreview){
         super(Type.SHAPE,isPreview);
         _color=color;
         _points=points;
         _stroke=stroke;
+        initResizePoint();
     }
+
+    @Override
+    public void resize(int resizePointRank, Point posTo) {
+        _points[resizePointRank].x=posTo.x;
+        _points[resizePointRank].y=posTo.y;
+
+        resizePoint.reposition(null);
+    }
+
+    @Override
+    public Vector<Point> getResizePoints() {
+        return new Vector<>(Arrays.asList(_points));
+    }
+
     public void reposition(Point pos) {
         Point delta=new Point(pos.x-_points[0].x,pos.y-_points[0].y);
         for (Point x:_points){
