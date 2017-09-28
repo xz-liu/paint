@@ -81,7 +81,9 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
             setPreview(begin, now);
         }
         else if(settings.getType()== BoardSettings.Type.SELECT){
-            settings.getPointNow().getItem().resize(settings.getSelectPoint(),now);
+            ResizePoint resizePoint=settings.getPointNow();
+            if(resizePoint!=null&&resizePoint.valid())
+                resizePoint.getItem().resize(settings.getSelectPoint(),now);
         }
         else if (settings.getType() != BoardSettings.Type.MOVE)
             setPreview(begin, now);

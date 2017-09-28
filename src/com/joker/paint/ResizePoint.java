@@ -29,10 +29,9 @@ public class ResizePoint extends DrawingItem{
     public ResizePoint(){
         super(Type.RESIZEPOINT, true);
     }
-    private boolean valid(){return points!=null&&item!=null;}
+    public boolean valid(){return points!=null&&item!=null;}
     @Override
     public void reposition(Point point) {
-
         if(point==null){
             points=item.getResizePoints();
         }else {
