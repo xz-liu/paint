@@ -1,18 +1,19 @@
 package com.joker.paint;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Vector;
 
 /**
  * Created by Adam on 2017/9/15.
  */
-public abstract class DrawingItem {
+public abstract class DrawingItem implements Serializable {
 
     public enum Type{
-        IMAGE,TEXT,SHAPE,POINTS,POLYGON,RESIZEPOINT
+        IMAGE,TEXT,RECT,OVAL,SHAPE,POINTS,POLYGON,RESIZEPOINT
     }
     protected Type _type;
-    protected ResizePoint resizePoint;
+    protected transient ResizePoint resizePoint;
    //  private Rectangle rectSelect;
     public boolean isSelectedPreview() {
         return selectedPreview;
@@ -35,7 +36,7 @@ public abstract class DrawingItem {
         _type=type;
         selectedPreview =isPreview;
     }
-    protected void initResizePoint(){
+    public void initResizePoint(){
         resizePoint=new ResizePoint(this);
     }
 
@@ -49,4 +50,5 @@ public abstract class DrawingItem {
 //    public abstract Rectangle getRectSelect();
     public abstract Vector<Point> getResizePoints();
     public abstract DrawingItem createPreview();
+
 }

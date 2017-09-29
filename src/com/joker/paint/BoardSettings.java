@@ -70,7 +70,7 @@ public class BoardSettings {
         type = Type.POINTS;
         this.mainFrame = jFrame;
         this.color=Color.BLACK;
-        this.stroke=new BasicStroke(5f);
+        this.stroke=jFrame.getStrokeChooserPanel().getSelectedStroke();
         this.imgNow=null;
         this.fill=false;
         this.history=jFrame.getHistory();

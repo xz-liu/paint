@@ -1,12 +1,9 @@
 package com.joker.paint;
 
+import external.AStrokeToFixJavasFlaw;
 import external.JFontChooser;
 import external.StrokeChooserPanel;
 import external.StrokeSample;
-import javafx.event.ActionEvent;
-import javafx.scene.control.ColorPicker;
-import napkin.NapkinLookAndFeel;
-//import napkin.NapkinLookAndFeel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -16,9 +13,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
-import java.beans.EventHandler;
 import java.io.File;
 import java.io.IOException;
 
@@ -42,48 +36,29 @@ public class MainForm extends JFrame{
         return board;
     }
 
+    public StrokeChooserPanel getStrokeChooserPanel(){
+        return strokeChooserPanel;
+    }
+
     private void initChoose() {
-        StrokeSample[] samples = {
-                new StrokeSample(new BasicStroke(1f)),
-                new StrokeSample(new BasicStroke(2f)),
-                new StrokeSample(new BasicStroke(3f)),
-                new StrokeSample(new BasicStroke(4f)),
-                new StrokeSample(new BasicStroke(5f)),
-                new StrokeSample(new BasicStroke(6f)),
-                new StrokeSample(new BasicStroke(7f)),
-                new StrokeSample(new BasicStroke(8f)),
-                new StrokeSample(new BasicStroke(9f)),
-                new StrokeSample(new BasicStroke(10f)),
-                new StrokeSample(new BasicStroke(11f)),
-                new StrokeSample(new BasicStroke(12f)),
-                new StrokeSample(new BasicStroke(1.5f, BasicStroke.CAP_BUTT,
-                        BasicStroke.JOIN_ROUND, 2.5f, new float[]{15, 10,},
-                        0f)),
-                new StrokeSample(new BasicStroke(2.5f, BasicStroke.CAP_BUTT,
-                BasicStroke.JOIN_ROUND, 3.5f, new float[]{15, 10,},
-                0f)),
-                new StrokeSample(new BasicStroke(3.5f, BasicStroke.CAP_BUTT,
-                        BasicStroke.JOIN_ROUND, 4.5f, new float[]{15, 10,},
-                        0f)),
-                new StrokeSample(new BasicStroke(4.5f, BasicStroke.CAP_BUTT,
-                        BasicStroke.JOIN_ROUND, 5.5f, new float[]{15, 10,},
-                        0f)),
-
-                new StrokeSample(new BasicStroke(5.5f, BasicStroke.CAP_BUTT,
-                        BasicStroke.JOIN_ROUND, 6.5f, new float[]{15, 10,},
-                        0f)),
-
-                new StrokeSample(new BasicStroke(6.5f, BasicStroke.CAP_BUTT,
-                        BasicStroke.JOIN_ROUND, 7.5f, new float[]{15, 10,},
-                        0f)),
-        };
-        strokeChooserPanel = new StrokeChooserPanel(new StrokeSample(new BasicStroke(3f)), samples);
+        StrokeSample[] samples=StrokeLibrary.strokes;
+        strokeChooserPanel = new StrokeChooserPanel(samples[2], samples);
         strokeChooserPanel.addSelectorListener(e->{
            settings.setStroke(strokeChooserPanel.getSelectedStroke());
         });
     }
+    boolean asImageFile(File file){
+        String name=file.getName(),extension;
+        int extBegin=name.lastIndexOf('.');
+//        boolean asImageFile;
+        if(extBegin==-1)return true;
+        else {
+            extension=name.substring(extBegin);
+            return !extension.equals(".pnt");
+        }
+    }
     private void initButtons(){
-        initChoose();
+
         buttonSelect=new JButton("Select");
         buttonSelect.addActionListener(e->{
             settings.setType(BoardSettings.Type.SELECT);
@@ -111,21 +86,27 @@ public class MainForm extends JFrame{
             settings.setType(BoardSettings.Type.POLYGON);
             settings.clearPoints();
         });
-        buttonOpenImg=new JButton("Image");
+        buttonOpenImg=new JButton("Open");
         buttonOpenImg.addActionListener(e-> {
-            settings.setType(BoardSettings.Type.IMAGE);
-            JFileChooser fileChooser=new JFileChooser();
+            JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Choose Image");
             fileChooser.setFileFilter(new FileNameExtensionFilter("Image Files","gif","png","jpg","bmp","jpeg"));
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Painting Files","pnt"));
             while (fileChooser.showOpenDialog(this)!=JFileChooser.APPROVE_OPTION){
                 int confirmDialog = JOptionPane.showConfirmDialog(this, "Selection failed, continue?");
                 if(confirmDialog!=0){
                     return;
                 }
             }
-            File file=fileChooser.getSelectedFile();
+            File file = fileChooser.getSelectedFile();
             try {
-                settings.setImgNow(ImageIO.read(file));
+                if (asImageFile(file)) {
+                    settings.setType(BoardSettings.Type.IMAGE);
+                    settings.setImgNow(ImageIO.read(file));
+                }
+                else{
+                    board.readList(ListIO.readList(this,file));
+                }
             }catch (Exception ex){
                 JOptionPane.showMessageDialog(this,"Read file failed");
             }
@@ -157,7 +138,10 @@ public class MainForm extends JFrame{
 
         buttonClear=new JButton("Clear");
         buttonClear.addActionListener(e->{
-            board.clearBoard();
+            if (JOptionPane.showConfirmDialog(settings.getMainFrame(),
+                    "Clear the paint board and discard all changes?") == 0) {
+                board.clearBoard();
+            }
         });
 
 
@@ -185,13 +169,20 @@ public class MainForm extends JFrame{
         buttonSave.addActionListener(e->{
             BufferedImage image=board.getImage();
             JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Image File","jpg","png","gif","jpeg"));
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Paint Save File","pnt"));
             if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
+
                 // save to file
                 try {
-                    ImageIO.write(image, "jpg", file);
-                }catch (IOException ioe){
-                    JOptionPane.showMessageDialog(this,"Save Failed");
+                    if (asImageFile(file)) {
+                        ImageIO.write(image, "jpg", file);
+                    } else {
+                        ListIO.saveList(this, board.getItemsList(), file);
+                    }
+                } catch (IOException ioe) {
+                    JOptionPane.showMessageDialog(this, "Save Failed");
                 }
             }
         });
@@ -201,11 +192,12 @@ public class MainForm extends JFrame{
             settings.setFill(checkBoxFill.isSelected());
         });
         select.add(buttonSave);
+        select.add(buttonOpenImg);
+        select.add(Box.createRigidArea(new Dimension(3,1)));
         select.add(strokeChooserPanel);
         select.add(buttonColor);
         select.add(buttonSelect);
         select.add(Box.createRigidArea(new Dimension(3,1)));
-        select.add(buttonOpenImg);
         select.add(buttonPoints);
         select.add(buttonLines);
         select.add(buttonOval);
@@ -297,6 +289,7 @@ public class MainForm extends JFrame{
         select=new JPanel();
         initHistory();
         select.setSize(new Dimension(700,30));
+        initChoose();
         settings=new BoardSettings(this);
         board=new DrawingBoard(settings,new Dimension(d.width-historyMain.getWidth(),d.height-historyMain.getHeight()));
         initButtons();
@@ -308,6 +301,6 @@ public class MainForm extends JFrame{
         select.revalidate();
     }
     public static void main(String[] args) {
-        MainForm mainForm=new MainForm();
+        new MainForm();
     }
 }

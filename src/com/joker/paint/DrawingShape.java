@@ -16,19 +16,27 @@ public class DrawingShape extends DrawingItem {
     private boolean _fill;
     public DrawingShape(Color color,Shape shape,boolean fill,Stroke stroke,boolean isPreview){
         super(Type.SHAPE,isPreview);
-        _color=color;
-        _shape=shape;
-        _fill=fill;
-        _stroke=fill?null:stroke;
-        initResizePoint();
+        init(color,shape,fill,stroke);
     }
     public DrawingShape(Color color,Shape shape,boolean fill,Stroke stroke){
         super(Type.SHAPE,false);
+        init(color,shape,fill,stroke);
+    }
+    private void  init(Color color,Shape shape,boolean fill,Stroke stroke){
         _color=color;
         _shape=shape;
         _fill=fill;
         _stroke=fill?null:stroke;
         initResizePoint();
+        if(_shape instanceof Rectangle){
+            setType(Type.RECT);
+        }
+        if(_shape instanceof Ellipse2D.Double){
+            setType(Type.OVAL);
+        }
+        if(_shape instanceof Ellipse2D.Float){
+            setType(Type.OVAL);
+        }
     }
     public void reposition(Point pos){
         if(_shape instanceof Rectangle){

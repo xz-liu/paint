@@ -12,14 +12,14 @@ public class DrawingPoints extends DrawingItem {
     private Point[] _points;
     private Stroke _stroke;
     public DrawingPoints(Color color,Point[] points,Stroke stroke){
-        super(Type.SHAPE,false);
+        super(Type.POINTS,false);
         _color=color;
         _points=points;
         _stroke=stroke;
         initResizePoint();
     }
     public DrawingPoints(Color color,Point[] points,Stroke stroke,boolean isPreview){
-        super(Type.SHAPE,isPreview);
+        super(Type.POINTS,isPreview);
         _color=color;
         _points=points;
         _stroke=stroke;

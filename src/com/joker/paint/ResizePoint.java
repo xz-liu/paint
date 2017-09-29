@@ -84,9 +84,11 @@ public class ResizePoint extends DrawingItem{
         }
         for (Point point : points) {
             graphics2D.setColor(colorPrev);
-            graphics2D.fillOval(point.x - (int) radius, point.y - (int) radius, (int) radius * 2, (int) radius * 2);
+            graphics2D.fillOval(point.x - (int) radius, point.y - (int) radius,
+                    (int) radius * 2, (int) radius * 2);
             graphics2D.setColor(Color.BLACK);
-            graphics2D.drawOval(point.x - (int) radius, point.y - (int) radius, (int) radius * 2, (int) radius * 2);
+            graphics2D.drawOval(point.x - (int) radius, point.y - (int) radius,
+                    (int) radius * 2, (int) radius * 2);
         }
     }
 

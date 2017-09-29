@@ -1,5 +1,8 @@
 package com.joker.paint;
 
+//import external.BetterBasicStroke;
+import external.StrokeSample;
+
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Vector;
@@ -15,14 +18,14 @@ public class DrawingLines extends DrawingItem {
         super(Type.SHAPE,false);
         _color=color;
         _points=points;
-        _stroke=stroke;
+        _stroke= stroke;
         initResizePoint();
     }
     public DrawingLines(Color color,Point[] points,Stroke stroke,boolean isPreview){
         super(Type.SHAPE,isPreview);
         _color=color;
         _points=points;
-        _stroke=stroke;
+        _stroke= stroke;
         initResizePoint();
     }
 
