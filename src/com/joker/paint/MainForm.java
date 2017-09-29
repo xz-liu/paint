@@ -309,7 +309,12 @@ public class MainForm extends JFrame{
         this.add(mainPanel);
         select.revalidate();
     }
+
+    private static MainForm mainForm;
+    public static MainForm getMainFormInstance(){
+        return mainForm;
+    }
     public static void main(String[] args) {
-        new MainForm();
+        mainForm=new MainForm();
     }
 }

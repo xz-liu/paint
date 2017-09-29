@@ -1,15 +1,20 @@
 package com.joker.paint;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Vector;
 
 /**
  * Created by Adam on 2017/9/18.
  */
 public class DrawingImage extends DrawingItem {
-    private Image _image;
-    private JFrame _imgObserver;
+    private transient Image _image;
+    private transient JFrame _imgObserver;
     private Rectangle _pos;
     public DrawingImage(Image image,Rectangle pos,JFrame imgObserver){
        super(Type.IMAGE,false);
@@ -65,5 +70,17 @@ public class DrawingImage extends DrawingItem {
     public DrawingItem createPreview() {
         return new DrawingShape(selectedColor,
                 new Rectangle(_pos.x,_pos.y,_pos.width,_pos.height),false,new BasicStroke(6f),true);
+    }
+
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        ImageIO.write((BufferedImage)_image, "png", out); // png
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        _image=ImageIO.read(in);
+        _imgObserver=MainForm.getMainFormInstance();
     }
 }
