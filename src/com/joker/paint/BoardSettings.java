@@ -81,6 +81,7 @@ public class BoardSettings {
     }
     public void clearPoints(){
         setPoints(null);
+        mainFrame.getBoard().repaint();
     }
 
     public JPanel getHistory() {

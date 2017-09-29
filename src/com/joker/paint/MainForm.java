@@ -37,6 +37,11 @@ public class MainForm extends JFrame{
     public JPanel getHistory() {
         return history;
     }
+
+    public DrawingBoard getBoard() {
+        return board;
+    }
+
     private void initChoose() {
         StrokeSample[] samples = {
                 new StrokeSample(new BasicStroke(1f)),
@@ -82,13 +87,14 @@ public class MainForm extends JFrame{
         buttonSelect=new JButton("Select");
         buttonSelect.addActionListener(e->{
             settings.setType(BoardSettings.Type.SELECT);
-            settings.clearPoints();
             settings.nextResizePoint(null);
+            settings.clearPoints();
         });
         buttonLines=new JButton("Lines");
         buttonLines.addActionListener(e->{
             settings.setType(BoardSettings.Type.LINES);
             settings.clearPoints();
+            board.repaint();
         });
         buttonPoints=new JButton("Pen");
         buttonPoints.addActionListener(e-> {
