@@ -1,6 +1,5 @@
 package com.joker.paint;
 
-import external.AStrokeToFixJavasFlaw;
 import external.JFontChooser;
 import external.StrokeChooserPanel;
 import external.StrokeSample;
@@ -51,15 +50,21 @@ public class MainForm extends JFrame{
         String name=file.getName(),extension;
         int extBegin=name.lastIndexOf('.');
 //        boolean asImageFile;
-        if(extBegin==-1)return true;
+        if(extBegin==-1)return false;
+        else if(extBegin==name.length()-1)return false;
         else {
+            extBegin++;
             extension=name.substring(extBegin);
-            return !extension.equals(".pnt");
+            String[] exts={"jpg","png","gif","jpeg"};
+            for (String ext : exts) {
+                if (ext.equals(extension))return true;
+            }
         }
+        return false;
     }
     private void initButtons(){
 
-        buttonSelect=new JButton("Select");
+        buttonSelect=new JButton("Resize");
         buttonSelect.addActionListener(e->{
             settings.setType(BoardSettings.Type.SELECT);
             settings.nextResizePoint(null);
@@ -172,13 +177,17 @@ public class MainForm extends JFrame{
             fileChooser.setFileFilter(new FileNameExtensionFilter("Image File","jpg","png","gif","jpeg"));
             fileChooser.setFileFilter(new FileNameExtensionFilter("Paint Save File","pnt"));
             if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                File file = fileChooser.getSelectedFile();
-
+                File file=fileChooser.getSelectedFile();
                 // save to file
                 try {
                     if (asImageFile(file)) {
                         ImageIO.write(image, "jpg", file);
                     } else {
+                        String name = file.getName();
+                        String path=file.getAbsolutePath();
+                        if (!name.substring(name.lastIndexOf('.')+1).equals("pnt")){
+                            file=new File(path+".pnt");
+                        }
                         ListIO.saveList(this, board.getItemsList(), file);
                     }
                 } catch (IOException ioe) {

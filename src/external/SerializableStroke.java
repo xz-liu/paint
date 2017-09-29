@@ -5,10 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.annotation.Native;
 
-public class AStrokeToFixJavasFlaw implements java.io.Serializable,Stroke{
+public class SerializableStroke implements java.io.Serializable,Stroke{
     public transient BasicStroke theDamnBasicStroke;
-    public AStrokeToFixJavasFlaw(float width, int cap, int join, float miterlimit,
-                       float dash[], float dash_phase) {
+    public SerializableStroke(float width, int cap, int join, float miterlimit,
+                              float dash[], float dash_phase) {
         theDamnBasicStroke=new BasicStroke(width,cap,join,miterlimit,dash,dash_phase);
     }
 //    float width, int cap, int join, float miterlimit,
@@ -45,7 +45,7 @@ public class AStrokeToFixJavasFlaw implements java.io.Serializable,Stroke{
      * @throws IllegalArgumentException if {@code join} is not
      *         either JOIN_ROUND, JOIN_BEVEL, or JOIN_MITER
      */
-    public AStrokeToFixJavasFlaw(float width, int cap, int join, float miterlimit) {
+    public SerializableStroke(float width, int cap, int join, float miterlimit) {
         this(width, cap, join, miterlimit, null, 0.0f);
     }
 
@@ -63,7 +63,7 @@ public class AStrokeToFixJavasFlaw implements java.io.Serializable,Stroke{
      * @throws IllegalArgumentException if {@code join} is not
      *         either JOIN_ROUND, JOIN_BEVEL, or JOIN_MITER
      */
-    public AStrokeToFixJavasFlaw(float width, int cap, int join) {
+    public SerializableStroke(float width, int cap, int join) {
         this(width, cap, join, 10.0f, null, 0.0f);
     }
 
@@ -74,7 +74,7 @@ public class AStrokeToFixJavasFlaw implements java.io.Serializable,Stroke{
      * @param width the width of the {@code BasicStroke}
      * @throws IllegalArgumentException if {@code width} is negative
      */
-    public AStrokeToFixJavasFlaw(float width) {
+    public SerializableStroke(float width) {
         this(width, CAP_SQUARE, JOIN_MITER, 10.0f, null, 0.0f);
     }
 
@@ -84,7 +84,7 @@ public class AStrokeToFixJavasFlaw implements java.io.Serializable,Stroke{
      * The default attributes are a solid line of width 1.0, CAP_SQUARE,
      * JOIN_MITER, a miter limit of 10.0.
      */
-    public AStrokeToFixJavasFlaw() {
+    public SerializableStroke() {
         this(1.0f, CAP_SQUARE, JOIN_MITER, 10.0f, null, 0.0f);
     }
     /**

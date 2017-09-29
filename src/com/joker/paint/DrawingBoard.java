@@ -1,7 +1,7 @@
 package com.joker.paint;
 
 
-import external.AStrokeToFixJavasFlaw;
+import external.SerializableStroke;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +14,6 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Vector;
-import java.util.List;
-import java.util.function.BiConsumer;
 
 /**
  * Created by Adam on 2017/9/15.
@@ -68,8 +66,8 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                               DrawingBoard drawingBoard) {
         this.settings = settings;
         this.drawingBoard = drawingBoard;
-        this.dash = new AStrokeToFixJavasFlaw(2.5f, AStrokeToFixJavasFlaw.CAP_BUTT,
-                AStrokeToFixJavasFlaw.JOIN_ROUND, 3.5f, new float[]{15, 10,},
+        this.dash = new SerializableStroke(2.5f, SerializableStroke.CAP_BUTT,
+                SerializableStroke.JOIN_ROUND, 3.5f, new float[]{15, 10,},
                 0f);
 //        this.buttons=new LinkedList<>();
     }
