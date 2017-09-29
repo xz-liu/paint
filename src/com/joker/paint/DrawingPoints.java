@@ -28,15 +28,15 @@ public class DrawingPoints extends DrawingItem {
 
     @Override
     public void resize(int resizePointRank, Point posTo) {
-        _points[resizePointRank].x=posTo.x;
-        _points[resizePointRank].y=posTo.y;
-
+        reposition(posTo);
         resizePoint.reposition(null);
     }
 
     @Override
     public Vector<Point> getResizePoints() {
-        return new Vector<>(Arrays.asList(_points));
+        Vector<Point> points=new Vector<>();
+        points.add(_points[0]);
+        return points;
     }
 
     public void reposition(Point pos) {

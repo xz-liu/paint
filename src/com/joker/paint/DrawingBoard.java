@@ -359,7 +359,10 @@ public class DrawingBoard extends JPanel  {
     @Override
     public void paint(Graphics g){
         super.paintComponent(g);
-
+        g.setColor(Color.WHITE);
+        g.fillRect(0,0,getWidth(),getHeight());
+        g.setColor(Color.BLACK);
+        g.drawRect(0,0,getWidth(),getHeight());
         if(itemsList != null)
             for(DrawingItem items : itemsList) {
                 items.draw(g);
