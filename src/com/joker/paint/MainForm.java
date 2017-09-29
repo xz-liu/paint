@@ -1,5 +1,6 @@
 package com.joker.paint;
 
+//import com.sun.codemodel.internal.JOp;
 import external.JFontChooser;
 import external.StrokeChooserPanel;
 import external.StrokeSample;
@@ -149,7 +150,6 @@ public class MainForm extends JFrame{
             }
         });
 
-
         textImput=new JTextField(15);
         textImput.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -174,17 +174,23 @@ public class MainForm extends JFrame{
         buttonSave.addActionListener(e->{
             BufferedImage image=board.getImage();
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileFilter(new FileNameExtensionFilter("Image File","jpg","png","gif","jpeg"));
-            fileChooser.setFileFilter(new FileNameExtensionFilter("Paint Save File","pnt"));
+            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Image File","jpg","png","gif","jpeg"));
+            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Paint Save File","pnt"));
+//            fileChooser.a
             if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File file=fileChooser.getSelectedFile();
                 // save to file
                 try {
-                    if (asImageFile(file)) {
+                    String name = file.getName();
+                    String path=file.getAbsolutePath();
+                    String filter=fileChooser.getFileFilter().getDescription();
+                    if (filter.contains("Image")) {
+                        if (name.lastIndexOf('.') == -1) {
+                            file = new File(path + ".jpg");
+                        }
                         ImageIO.write(image, "jpg", file);
-                    } else {
-                        String name = file.getName();
-                        String path=file.getAbsolutePath();
+                    }
+                     else {
                         if (!name.substring(name.lastIndexOf('.')+1).equals("pnt")){
                             file=new File(path+".pnt");
                         }

@@ -66,14 +66,14 @@ public class BoardSettings {
     }
 
     Font  font;
-    public BoardSettings(MainForm jFrame) {
+    public BoardSettings(MainForm mainFrame) {
         type = Type.POINTS;
-        this.mainFrame = jFrame;
+        this.mainFrame = mainFrame;
         this.color=Color.BLACK;
-        this.stroke=jFrame.getStrokeChooserPanel().getSelectedStroke();
+        this.stroke=mainFrame.getStrokeChooserPanel().getSelectedStroke();
         this.imgNow=null;
         this.fill=false;
-        this.history=jFrame.getHistory();
+        this.history=mainFrame.getHistory();
         this.font=new JLabel().getFont();
         this.text="";
         this.itemReplacing=null;

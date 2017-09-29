@@ -1,7 +1,5 @@
 package com.joker.paint;
 
-        import external.StrokeChooserPanel;
-
         import java.awt.*;
         import java.util.Vector;
 
@@ -67,7 +65,8 @@ public class ResizePoint extends DrawingItem{
 
     @Override
     public void draw(Graphics g) {
-        final Color colorPrev=new Color(1.0f,1.0f,1.0f,0.5f);
+        final Color colorWhite=new Color(1.0f,1.0f,1.0f,0.4f);
+        final Color colorBlack=new Color(0.0f,0.0f,0.0f,0.4f);
         Graphics2D graphics2D = (Graphics2D) g;
         graphics2D.setStroke(new BasicStroke(1));
         graphics2D.setStroke(dash);
@@ -75,7 +74,7 @@ public class ResizePoint extends DrawingItem{
             graphics2D.setColor(Color.BLACK);
         }
         else {
-            graphics2D.setColor(colorPrev);
+            graphics2D.setColor(colorWhite);
         }
 
         for (int i=1;i<points.size();i++){
@@ -83,10 +82,17 @@ public class ResizePoint extends DrawingItem{
             graphics2D.drawLine(x.x,x.y,y.x,y.y);
         }
         for (Point point : points) {
-            graphics2D.setColor(colorPrev);
+            if (show)
+                graphics2D.setColor(Color.WHITE);
+            else
+                graphics2D.setColor(colorWhite);
+
             graphics2D.fillOval(point.x - (int) radius, point.y - (int) radius,
                     (int) radius * 2, (int) radius * 2);
-            graphics2D.setColor(Color.BLACK);
+            if (show)
+                graphics2D.setColor(Color.BLACK);
+            else
+                graphics2D.setColor(colorBlack);
             graphics2D.drawOval(point.x - (int) radius, point.y - (int) radius,
                     (int) radius * 2, (int) radius * 2);
         }

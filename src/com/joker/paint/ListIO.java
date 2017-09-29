@@ -30,12 +30,12 @@ public class ListIO {
     public static void saveList(JFrame mainForm, LinkedList<DrawingItem> target, File file) {
         try {
             String fileName = file.getName();
-            String tail = fileName.substring(fileName.lastIndexOf(".")+1);
+//            String tail = fileName.substring(fileName.lastIndexOf(".")+1);
 //            if (tail != "pnt") throw new IOException("File type error");
             if (!file.exists())
                file.createNewFile();
         } catch(IOException e) {
-            JOptionPane.showMessageDialog(mainForm,"Save file failed");
+            JOptionPane.showMessageDialog(mainForm,"Save file failed:"+e.getMessage());
         }
         try {
             FileOutputStream fos = new FileOutputStream(file);
