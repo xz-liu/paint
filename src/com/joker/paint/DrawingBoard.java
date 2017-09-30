@@ -47,10 +47,6 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
             case POINTS:
                 drawingBoard.setPreview(new DrawingPoints(settings.color,settings.getPoints().toArray(new Point[0]),settings.getStroke()));
                 break;
-            case POLYGON:
-            case LINES:
-                drawingBoard.setPreview(new DrawingPoints(settings.color,settings.getPoints().toArray(new Point[0]),dash));
-                break;
             case TEXT:
                 drawingBoard.setPreview(new DrawingText(settings.getText(),now,settings.getFont(),settings.getColor()));
                 break;
@@ -94,10 +90,21 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (settings.getType() == BoardSettings.Type.SELECT) {
-            Point now = new Point(e.getPoint());
-            selectResizePoint(now);
+        Point mouse = new Point(e.getPoint());
+        switch (settings.getType()) {
+            case SELECT:
+                selectResizePoint(mouse);
+                break;
+            case POLYGON:
+            case LINES:
+                Vector<Point> previewPoints = (Vector<Point>) settings.getPoints().clone();
+                previewPoints.add(mouse);
+                drawingBoard.setPreview(new DrawingPoints(settings.color,
+                        previewPoints.toArray(new Point[0]), settings.getStroke()));
+                drawingBoard.repaint();
+                break;
         }
+
     }
 
     @Override
