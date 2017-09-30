@@ -94,7 +94,10 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
+        if (settings.getType() == BoardSettings.Type.SELECT) {
+            Point now = new Point(e.getPoint());
+            selectResizePoint(now);
+        }
     }
 
     @Override
@@ -119,23 +122,26 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         drawingBoard.repaint();
     }
 
+    private void selectResizePoint(Point point){
+        for (ListIterator<DrawingItem> iter =
+             drawingBoard.getItemsList().
+                     listIterator(drawingBoard.getItemsList().size()); iter.hasPrevious(); ) {
+            DrawingItem item = iter.previous();
+            int result;
+            if ((result = item.getResizePoint().selected(point)) >= 0) {
+                settings.nextResizePoint(item.getResizePoint());
+//                JOptionPane.showMessageDialog(null,result);
+                settings.setSelectPoint(result);
+                break;
+            }
+            drawingBoard.repaint();
+        }
+    }
     @Override
     public void mousePressed(MouseEvent e) {
         begin = new Point(e.getPoint());
         if (settings.getType() == BoardSettings.Type.SELECT) {
-            for (ListIterator<DrawingItem> iter =
-                 drawingBoard.getItemsList().
-                         listIterator(drawingBoard.getItemsList().size()); iter.hasPrevious(); ) {
-                DrawingItem item = iter.previous();
-                int result;
-                if ((result = item.getResizePoint().selected(begin)) >= 0) {
-                    settings.nextResizePoint(item.getResizePoint());
-//                JOptionPane.showMessageDialog(null,result);
-                    settings.setSelectPoint(result);
-                    break;
-                }
-                drawingBoard.repaint();
-            }
+            selectResizePoint(begin);
         } else if (settings.getType()!= BoardSettings.Type.POLYGON&&
                 settings.getType()!= BoardSettings.Type.LINES){
             settings.getPoints().addElement(begin);
@@ -278,8 +284,6 @@ class HistoryButton extends JButton{
                     board.setPreview(null);
                     break;
                 case MOVE:
-
-                    board.setPreview(this.item.createPreview());
                     settings.setItemReplacing(this.item);
                 default:
                     board.setPreview(this.item.createPreview());

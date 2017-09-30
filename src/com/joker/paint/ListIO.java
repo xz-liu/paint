@@ -24,7 +24,7 @@ public class ListIO {
            JOptionPane.showMessageDialog(mainForm, "Class not found");
            e.printStackTrace();
         }
-        return null;
+        return new LinkedList<>();
     }
 
     public static void saveList(JFrame mainForm, LinkedList<DrawingItem> target, File file) {
