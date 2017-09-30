@@ -17,11 +17,7 @@ public class DrawingImage extends DrawingItem {
     private transient JFrame _imgObserver;
     private Rectangle _pos;
     public DrawingImage(Image image,Rectangle pos,JFrame imgObserver){
-       super(Type.IMAGE,false);
-       _image=image;
-       _pos=pos;
-       _imgObserver=imgObserver;
-        initResizePoint();
+        this(image,pos,imgObserver,false);
     }
     public DrawingImage(Image image,Rectangle pos,JFrame imgObserver,boolean isPreview){
         super(Type.IMAGE,isPreview);

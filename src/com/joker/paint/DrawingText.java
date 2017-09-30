@@ -12,12 +12,7 @@ public class DrawingText extends DrawingItem {
     private Font font;
     private Color color;
     public DrawingText(String text, Point pos,Font font,Color color){
-        super(Type.TEXT,false);
-        this.text=text;
-        this.font=font;
-        this.pos=pos;
-        this.color=color;
-        initResizePoint();
+        this(text,pos,font,color,false);
     }
     public DrawingText(String text, Point pos,Font font,Color color,boolean isPreview){
         super(Type.TEXT,isPreview);

@@ -19,8 +19,7 @@ public class DrawingShape extends DrawingItem {
         init(color,shape,fill,stroke);
     }
     public DrawingShape(Color color,Shape shape,boolean fill,Stroke stroke){
-        super(Type.SHAPE,false);
-        init(color,shape,fill,stroke);
+        this(color,shape,fill,stroke,false);
     }
     private void  init(Color color,Shape shape,boolean fill,Stroke stroke){
         _color=color;

@@ -13,12 +13,7 @@ public class DrawingPolygon extends DrawingItem {
     private boolean _fill;
     boolean _isPolygon;
     public DrawingPolygon(Color color,Polygon shape,boolean fill,Stroke stroke){
-        super(Type.POLYGON,false);
-        _color=color;
-        _shape=shape;
-        _fill=fill;
-        _stroke=fill?null:stroke;
-        initResizePoint();
+        this(color,shape,fill,stroke,false);
     }
     public DrawingPolygon(Color color,Polygon shape,boolean fill,Stroke stroke,boolean isPreview){
         super(Type.POLYGON,isPreview);

@@ -15,11 +15,7 @@ public class DrawingLines extends DrawingItem {
     private Point[] _points;
     private Stroke _stroke;
     public DrawingLines(Color color,Point[] points,Stroke stroke){
-        super(Type.SHAPE,false);
-        _color=color;
-        _points=points;
-        _stroke= stroke;
-        initResizePoint();
+        this(color,points,stroke,false);
     }
     public DrawingLines(Color color,Point[] points,Stroke stroke,boolean isPreview){
         super(Type.SHAPE,isPreview);
