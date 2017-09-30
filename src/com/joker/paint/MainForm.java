@@ -1,6 +1,7 @@
 package com.joker.paint;
 
 //import com.sun.codemodel.internal.JOp;
+
 import external.JFontChooser;
 import external.StrokeChooserPanel;
 import external.StrokeSample;
@@ -19,15 +20,16 @@ import java.io.IOException;
 /**
  * Created by Adam on 2017/9/15.
  */
-public class MainForm extends JFrame{
+public class MainForm extends JFrame {
     private DrawingBoard board;
-    private JPanel mainPanel,select,history, historyMain;
+    private JPanel mainPanel, select, history, historyMain;
     private BoardSettings settings;
-    private JButton buttonOpenImg,buttonDelete,buttonPoints,buttonPolygon,buttonOval,buttonRect,buttonText,buttonLines;
+    private JButton buttonOpenImg, buttonDelete, buttonPoints, buttonPolygon, buttonOval, buttonRect, buttonText, buttonLines;
     private JTextField textImput;
-    private JButton buttonColor,buttonFont,buttonClear,buttonMove,buttonTop,buttonBottom,buttonSave,buttonSelect;
+    private JButton buttonColor, buttonFont, buttonClear, buttonMove, buttonTop, buttonBottom, buttonSave, buttonSelect;
     private JCheckBox checkBoxFill;
     private StrokeChooserPanel strokeChooserPanel;
+
     public JPanel getHistory() {
         return history;
     }
@@ -36,71 +38,73 @@ public class MainForm extends JFrame{
         return board;
     }
 
-    public StrokeChooserPanel getStrokeChooserPanel(){
+    public StrokeChooserPanel getStrokeChooserPanel() {
         return strokeChooserPanel;
     }
 
     private void initChoose() {
-        StrokeSample[] samples=StrokeLibrary.strokes;
+        StrokeSample[] samples = StrokeLibrary.strokes;
         strokeChooserPanel = new StrokeChooserPanel(samples[2], samples);
-        strokeChooserPanel.addSelectorListener(e->{
-           settings.setStroke(strokeChooserPanel.getSelectedStroke());
+        strokeChooserPanel.addSelectorListener(e -> {
+            settings.setStroke(strokeChooserPanel.getSelectedStroke());
         });
     }
-    boolean asImageFile(File file){
-        String name=file.getName(),extension;
-        int extBegin=name.lastIndexOf('.');
+
+    boolean asImageFile(File file) {
+        String name = file.getName(), extension;
+        int extBegin = name.lastIndexOf('.');
 //        boolean asImageFile;
-        if(extBegin==-1)return false;
-        else if(extBegin==name.length()-1)return false;
+        if (extBegin == -1) return false;
+        else if (extBegin == name.length() - 1) return false;
         else {
             extBegin++;
-            extension=name.substring(extBegin);
-            String[] exts={"jpg","png","gif","jpeg"};
+            extension = name.substring(extBegin);
+            String[] exts = {"jpg", "png", "gif", "jpeg"};
             for (String ext : exts) {
-                if (ext.equals(extension))return true;
+                if (ext.equals(extension)) return true;
             }
         }
         return false;
     }
-    private void initButtons(){
 
-        buttonSelect=new JButton("Resize");
-        buttonSelect.addActionListener(e->{
+    private void initButtons() {
+
+        buttonSelect = new JButton("Resize");
+        buttonSelect.addActionListener(e -> {
             settings.setType(BoardSettings.Type.SELECT);
             settings.nextResizePoint(null);
             settings.clearPoints();
         });
-        buttonLines=new JButton("Lines");
-        buttonLines.addActionListener(e->{
+        buttonLines = new JButton("Lines");
+        buttonLines.addActionListener(e -> {
             settings.setType(BoardSettings.Type.LINES);
             settings.clearPoints();
             board.repaint();
         });
-        buttonPoints=new JButton("Pen");
-        buttonPoints.addActionListener(e-> {
+        buttonPoints = new JButton("Pen");
+        buttonPoints.addActionListener(e -> {
             settings.setType(BoardSettings.Type.POINTS);
             settings.clearPoints();
         });
-        buttonOval=new JButton("Oval");
-        buttonOval.addActionListener(e-> {
+        buttonOval = new JButton("Oval");
+        buttonOval.addActionListener(e -> {
             settings.setType(BoardSettings.Type.OVAL);
             settings.clearPoints();
         });
-        buttonPolygon=new JButton("Polygon");
-        buttonPolygon.addActionListener(e-> {
+        buttonPolygon = new JButton("Polygon");
+        buttonPolygon.addActionListener(e -> {
             settings.setType(BoardSettings.Type.POLYGON);
             settings.clearPoints();
         });
-        buttonOpenImg=new JButton("Open");
-        buttonOpenImg.addActionListener(e-> {
+        buttonOpenImg = new JButton("Open");
+        buttonOpenImg.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Choose Image");
-            fileChooser.setFileFilter(new FileNameExtensionFilter("Image Files","gif","png","jpg","bmp","jpeg"));
-            fileChooser.setFileFilter(new FileNameExtensionFilter("Painting Files","pnt"));
-            while (fileChooser.showOpenDialog(this)!=JFileChooser.APPROVE_OPTION){
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Image Files", "gif", "png", "jpg", "bmp", "jpeg"));
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Painting Files", "pnt"));
+            while (fileChooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
                 int confirmDialog = JOptionPane.showConfirmDialog(this, "Selection failed, continue?");
-                if(confirmDialog!=0){
+                if (confirmDialog != 0) {
                     return;
                 }
             }
@@ -109,48 +113,47 @@ public class MainForm extends JFrame{
                 if (asImageFile(file)) {
                     settings.setType(BoardSettings.Type.IMAGE);
                     settings.setImgNow(ImageIO.read(file));
+                } else {
+                    board.readList(ListIO.readList(this, file));
                 }
-                else{
-                    board.readList(ListIO.readList(this,file));
-                }
-            }catch (Exception ex){
-                JOptionPane.showMessageDialog(this,"Read file failed");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Read file failed");
             }
             settings.clearPoints();
         });
-        buttonRect=new JButton("Rect");
-        buttonRect.addActionListener(e-> {
+        buttonRect = new JButton("Rect");
+        buttonRect.addActionListener(e -> {
             settings.setType(BoardSettings.Type.RECT);
             settings.clearPoints();
         });
-        buttonText=new JButton("Text");
-        buttonText.addActionListener(e ->  {
-                settings.setType(BoardSettings.Type.TEXT);
+        buttonText = new JButton("Text");
+        buttonText.addActionListener(e -> {
+            settings.setType(BoardSettings.Type.TEXT);
             settings.clearPoints();
         });
 
-        buttonColor=new JButton("Color");
-        buttonColor.addActionListener(e->{
-            Color color=JColorChooser.showDialog(null,"Choose Color", Color.BLACK);
+        buttonColor = new JButton("Color");
+        buttonColor.addActionListener(e -> {
+            Color color = JColorChooser.showDialog(null, "Choose Color", Color.BLACK);
             settings.setColor(color);
         });
 
-        buttonFont=new JButton("Font");
-        buttonFont.addActionListener(e->{
-            JFontChooser fontChooser=new JFontChooser();
+        buttonFont = new JButton("Font");
+        buttonFont.addActionListener(e -> {
+            JFontChooser fontChooser = new JFontChooser();
             fontChooser.showDialog(this);
             settings.setFont(fontChooser.getSelectedFont());
         });
 
-        buttonClear=new JButton("Clear");
-        buttonClear.addActionListener(e->{
+        buttonClear = new JButton("Clear");
+        buttonClear.addActionListener(e -> {
             if (JOptionPane.showConfirmDialog(settings.getMainFrame(),
                     "Clear the paint board and discard all changes?") == 0) {
                 board.clearBoard();
             }
         });
 
-        textImput=new JTextField(15);
+        textImput = new JTextField(15);
         textImput.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -166,33 +169,33 @@ public class MainForm extends JFrame{
             public void changedUpdate(DocumentEvent e) {
                 setText();
             }
-            private void setText(){
-                    settings.setText(textImput.getText());
+
+            private void setText() {
+                settings.setText(textImput.getText());
             }
         });
-        buttonSave=new JButton("Save");
-        buttonSave.addActionListener(e->{
-            BufferedImage image=board.getImage();
+        buttonSave = new JButton("Save");
+        buttonSave.addActionListener(e -> {
+            BufferedImage image = board.getImage();
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Image File","jpg","png","gif","jpeg"));
-            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Paint Save File","pnt"));
+            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Image File", "jpg", "png", "gif", "jpeg"));
+            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Paint Save File", "pnt"));
 //            fileChooser.a
             if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                File file=fileChooser.getSelectedFile();
+                File file = fileChooser.getSelectedFile();
                 // save to file
                 try {
                     String name = file.getName();
-                    String path=file.getAbsolutePath();
-                    String filter=fileChooser.getFileFilter().getDescription();
+                    String path = file.getAbsolutePath();
+                    String filter = fileChooser.getFileFilter().getDescription();
                     if (filter.contains("Image")) {
                         if (name.lastIndexOf('.') == -1) {
                             file = new File(path + ".jpg");
                         }
                         ImageIO.write(image, "jpg", file);
-                    }
-                     else {
-                        if (!name.substring(name.lastIndexOf('.')+1).equals("pnt")){
-                            file=new File(path+".pnt");
+                    } else {
+                        if (!name.substring(name.lastIndexOf('.') + 1).equals("pnt")) {
+                            file = new File(path + ".pnt");
                         }
                         ListIO.saveList(this, board.getItemsList(), file);
                     }
@@ -202,17 +205,17 @@ public class MainForm extends JFrame{
             }
         });
 
-        checkBoxFill=new JCheckBox("Fill");
-        checkBoxFill.addActionListener(e->{
+        checkBoxFill = new JCheckBox("Fill");
+        checkBoxFill.addActionListener(e -> {
             settings.setFill(checkBoxFill.isSelected());
         });
         select.add(buttonSave);
         select.add(buttonOpenImg);
-        select.add(Box.createRigidArea(new Dimension(3,1)));
+        select.add(Box.createRigidArea(new Dimension(3, 1)));
         select.add(strokeChooserPanel);
         select.add(buttonColor);
         select.add(buttonSelect);
-        select.add(Box.createRigidArea(new Dimension(3,1)));
+        select.add(Box.createRigidArea(new Dimension(3, 1)));
         select.add(buttonPoints);
         select.add(buttonLines);
         select.add(buttonOval);
@@ -225,69 +228,89 @@ public class MainForm extends JFrame{
         select.add(buttonClear);
 
     }
-    private void initHistory(){
 
-        buttonTop=new JButton("Top");
-        buttonTop.addActionListener(e->{
-            settings.setType(BoardSettings.Type.TOP);
+    private void initHistory() {
+
+        buttonTop = new JButton("Top");
+        buttonTop.addActionListener(e -> {
+            if (settings.getType()== BoardSettings.Type.SELECT){
+                settings.getPointNow().getItem().getRelatedButton().goTop();
+                settings.getPointNow().getItem().getRelatedButton().reposition();
+            }
+            else {
+                settings.setType(BoardSettings.Type.TOP);
+            }settings.clearPoints();
+
+        });
+        buttonBottom = new JButton("Bottom");
+        buttonBottom.addActionListener(e -> {
+            if (settings.getType() == BoardSettings.Type.SELECT) {
+                settings.getPointNow().getItem().getRelatedButton().goBottom();
+                settings.getPointNow().getItem().getRelatedButton().reposition();
+            } else {
+                settings.setType(BoardSettings.Type.BOTTOM);
+            }
             settings.clearPoints();
         });
-        buttonBottom=new JButton("Bottom");
-        buttonBottom.addActionListener(e->{
-            settings.setType(BoardSettings.Type.BOTTOM);
-            settings.clearPoints();
+        buttonDelete = new JButton("Del");
+        buttonDelete.addActionListener(e -> {
+            if (settings.getType()== BoardSettings.Type.SELECT){
+                settings.getPointNow().getItem().getRelatedButton().delete();
+                settings.getPointNow().getItem().getRelatedButton().reposition();
+            }
+            else {
+                settings.setType(BoardSettings.Type.DELETE);
+            }settings.clearPoints();
         });
-        buttonDelete=new JButton("Del");
-        buttonDelete.addActionListener(e-> {
-            settings.setType(BoardSettings.Type.DELETE);
-            settings.clearPoints();
-        });
-        buttonMove=new JButton("Move");
-        buttonMove.addActionListener(e->{
-            settings.setType(BoardSettings.Type.MOVE);
+        buttonMove = new JButton("Move");
+        buttonMove.addActionListener(e -> {
+            if (settings.getType() == BoardSettings.Type.SELECT) {
+            } else {
+                settings.setType(BoardSettings.Type.MOVE);
+            }
             settings.clearPoints();
         });
 
-        historyMain =new JPanel();
-        historyMain.setLayout(new BoxLayout(historyMain,BoxLayout.PAGE_AXIS));
-        JPanel historyOptions=new JPanel();
+        historyMain = new JPanel();
+        historyMain.setLayout(new BoxLayout(historyMain, BoxLayout.PAGE_AXIS));
+        JPanel historyOptions = new JPanel();
         historyOptions.setLayout(new BorderLayout());
-        historyOptions.add(buttonTop,BorderLayout.NORTH);
-        historyOptions.add(buttonBottom,BorderLayout.SOUTH);
-        historyOptions.add(buttonMove,BorderLayout.EAST);
-        historyOptions.add(buttonDelete,BorderLayout.WEST);
+        historyOptions.add(buttonTop, BorderLayout.NORTH);
+        historyOptions.add(buttonBottom, BorderLayout.SOUTH);
+        historyOptions.add(buttonMove, BorderLayout.EAST);
+        historyOptions.add(buttonDelete, BorderLayout.WEST);
 
         historyMain.add(historyOptions);
 
-        history=new JPanel();
-        JScrollPane historyScroll=new JScrollPane(history);
+        history = new JPanel();
+        JScrollPane historyScroll = new JScrollPane(history);
 
-        historyScroll.setBounds(0,0,0,50);
+        historyScroll.setBounds(0, 0, 0, 50);
         history.setAutoscrolls(true);
-        historyScroll.setPreferredSize(new Dimension(80,700));
-        history.setSize(new Dimension(100,700));
-        history.setLayout(new BoxLayout(history,BoxLayout.PAGE_AXIS));
+        historyScroll.setPreferredSize(new Dimension(80, 700));
+        history.setSize(new Dimension(100, 700));
+        history.setLayout(new BoxLayout(history, BoxLayout.PAGE_AXIS));
         historyMain.add(historyScroll);
     }
-    public  MainForm(){
+
+    public MainForm() {
         try {
             this.setUndecorated(false);
 //            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 //            UIManager.setLookAndFeel(new NapkinLookAndFeel());
             SwingUtilities.updateComponentTreeUI(this);
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(this,"LOAD UI FAILED");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "LOAD UI FAILED");
         }
 
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setSize(d.width-100, d.height-100);
+        this.setSize(d.width - 100, d.height - 100);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.setTitle("Paint");
-        addWindowListener(new WindowAdapter()
-        {
+        addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (JOptionPane.showConfirmDialog(settings.getMainFrame(),
@@ -298,29 +321,31 @@ public class MainForm extends JFrame{
             }
         });
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        mainPanel=new JPanel();
+        mainPanel = new JPanel();
         mainPanel.setSize(d);
-        mainPanel.setLayout(new BorderLayout(1,1));
-        select=new JPanel();
+        mainPanel.setLayout(new BorderLayout(1, 1));
+        select = new JPanel();
         initHistory();
-        select.setSize(new Dimension(700,30));
+        select.setSize(new Dimension(700, 30));
         initChoose();
-        settings=new BoardSettings(this);
-        board=new DrawingBoard(settings,new Dimension(d.width-historyMain.getWidth(),d.height-historyMain.getHeight()));
+        settings = new BoardSettings(this);
+        board = new DrawingBoard(settings, new Dimension(d.width - historyMain.getWidth(), d.height - historyMain.getHeight()));
         initButtons();
         mainPanel.add(board);
-        mainPanel.add(select,BorderLayout.NORTH);
+        mainPanel.add(select, BorderLayout.NORTH);
 //        mainPanel.add(history,BorderLayout.WEST);
-        mainPanel.add(historyMain,BorderLayout.WEST);
+        mainPanel.add(historyMain, BorderLayout.WEST);
         this.add(mainPanel);
         select.revalidate();
     }
 
     private static MainForm mainForm;
-    public static MainForm getMainFormInstance(){
+
+    public static MainForm getMainFormInstance() {
         return mainForm;
     }
+
     public static void main(String[] args) {
-        mainForm=new MainForm();
+        mainForm = new MainForm();
     }
 }

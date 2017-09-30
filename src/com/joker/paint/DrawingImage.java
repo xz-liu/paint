@@ -72,7 +72,6 @@ public class DrawingImage extends DrawingItem {
                 new Rectangle(_pos.x,_pos.y,_pos.width,_pos.height),false,new BasicStroke(6f),true);
     }
 
-
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
         ImageIO.write((BufferedImage)_image, "png", out); // png

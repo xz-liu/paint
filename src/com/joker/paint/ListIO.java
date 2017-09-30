@@ -48,7 +48,7 @@ public class ListIO {
             JOptionPane.showMessageDialog(mainForm,"File not found");
             e.printStackTrace();
         } catch(IOException e) {
-            JOptionPane.showMessageDialog(mainForm,"Saving error!");
+            JOptionPane.showMessageDialog(mainForm,"Saving error!:"+e.getMessage());
             e.printStackTrace();
         }
     }

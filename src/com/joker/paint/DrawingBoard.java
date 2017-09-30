@@ -243,60 +243,14 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         if (settings.getPoints() != null) {
             drawingBoard.getItemsList().add(item);
             HistoryButton button=new HistoryButton(drawingBoard,settings.getType().toString(),item);
+            item.setRelatedButton(button);
             settings.getHistory().add(button);
             settings.getHistory().revalidate();
             settings.setPoints(null);
         }
     }
 }
-class HistoryButton extends JButton{
-    DrawingItem item;
-    private void replaceItems(LinkedList<DrawingItem> itemsList,boolean isFirst){
-        itemsList.remove(item);
-        if (isFirst){
-            itemsList.addFirst(item);
-        }else {
-            itemsList.addLast(item);
-        }
-    }
-    public HistoryButton(DrawingBoard board,String title,DrawingItem item){
-        super(title);
-        this.item=item;
-        BoardSettings settings=board.settings;
-        LinkedList<DrawingItem> itemsList=board.getItemsList();
-        final ActionListener listener=e->{
-            switch (settings.getType()) {
-                case DELETE:
-                    itemsList.remove(this.item);
-                    settings.getHistory().remove(this);
-                    board.setPreview(null);
-                    break;
-                case BOTTOM:
-                    replaceItems(itemsList,true);
-                    settings.getHistory().remove(this);
-                    settings.getHistory().add(this,0);
-                    board.setPreview(null);
-                    break;
-                case TOP:
-                    replaceItems(itemsList,false);
-                    settings.getHistory().remove(this);
-                    settings.getHistory().add(this);
-                    board.setPreview(null);
-                    break;
-                case MOVE:
-                    settings.setItemReplacing(this.item);
-                default:
-                    board.setPreview(this.item.createPreview());
-                    break;
 
-            }
-            settings.getHistory().revalidate();
-            settings.getHistory().repaint();
-            board.repaint();
-        };
-        this.addActionListener(listener);
-    }
-}
 public class DrawingBoard extends JPanel  {
     BoardSettings settings;
     LinkedList<DrawingItem> itemsList;
@@ -314,12 +268,12 @@ public class DrawingBoard extends JPanel  {
     }
 
     public void clearBoard() {
-            itemsList.clear();
-            settings.getHistory().removeAll();
-            this.setPreview(null);
-            this.repaint();
-            settings.getHistory().revalidate();
-            settings.getHistory().repaint();
+        itemsList.clear();
+        settings.getHistory().removeAll();
+        this.setPreview(null);
+        this.repaint();
+        settings.getHistory().revalidate();
+        settings.getHistory().repaint();
     }
 
     public LinkedList<DrawingItem> getItemsList() {
@@ -336,9 +290,6 @@ public class DrawingBoard extends JPanel  {
     public BufferedImage getImage() {
         image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         Graphics g = image.createGraphics();
-        /*
-
-         */
         g.fillRect(0, 0, image.getWidth(), image.getHeight());
         this.setPreview(null);
         this.repaint();
@@ -351,8 +302,9 @@ public class DrawingBoard extends JPanel  {
         itemsList.addAll(list);
         for (DrawingItem item:itemsList){
             item.initResizePoint();
-            settings.getHistory().add(new HistoryButton
+            item.setRelatedButton(new HistoryButton
                     (this,item.getType().toString(), item));
+            settings.getHistory().add(item.getRelatedButton());
         }
         settings.getHistory().revalidate();
         settings.getHistory().repaint();

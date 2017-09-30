@@ -35,7 +35,7 @@ public class DrawingPoints extends DrawingItem {
     @Override
     public Vector<Point> getResizePoints() {
         Vector<Point> points=new Vector<>();
-        points.add(_points[0]);
+        if (_points.length!=0)points.add(_points[0]);
         return points;
     }
 

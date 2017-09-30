@@ -12,6 +12,7 @@ public abstract class DrawingItem implements Serializable {
     public enum Type{
         IMAGE,TEXT,RECT,OVAL,SHAPE,POINTS,POLYGON,RESIZEPOINT
     }
+    protected transient HistoryButton relatedButton;
     protected Type _type;
     protected transient ResizePoint resizePoint;
    //  private Rectangle rectSelect;
@@ -44,6 +45,14 @@ public abstract class DrawingItem implements Serializable {
         return resizePoint;
     }
     public abstract void resize(int resizePointRank,Point posTo);
+
+    public HistoryButton getRelatedButton() {
+        return relatedButton;
+    }
+
+    public void setRelatedButton(HistoryButton relatedButton) {
+        this.relatedButton = relatedButton;
+    }
 
     public abstract void reposition(Point pos);
     public abstract void draw(Graphics g);
