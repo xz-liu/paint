@@ -12,29 +12,32 @@ import java.util.Vector;
  */
 public class DrawingLines extends DrawingItem {
     private Color _color;
-    private Point[] _points;
+    private Vector<Point> _points;
     private Stroke _stroke;
-    public DrawingLines(Color color,Point[] points,Stroke stroke){
+    public DrawingLines(Color color,Vector<Point> points,Stroke stroke){
         this(color,points,stroke,false);
     }
-    public DrawingLines(Color color,Point[] points,Stroke stroke,boolean isPreview){
+    public DrawingLines(Color color,Vector<Point> points,Stroke stroke,boolean isPreview){
         super(Type.SHAPE,isPreview);
         _color=color;
-        _points=points;
+        if (isPreview)
+            _points=points;
+        else
+            _points=(Vector<Point>) points.clone();
         _stroke= stroke;
         initResizePoint();
     }
 
     @Override
     public void resize(int resizePointRank, Point posTo) {
-        _points[resizePointRank].x=posTo.x;
-        _points[resizePointRank].y=posTo.y;
+        _points.elementAt(resizePointRank).x=posTo.x;
+        _points.elementAt(resizePointRank).y=posTo.y;
 
         resizePoint.reposition(null);
     }
 
     public void reposition(Point pos) {
-        Point delta=new Point(pos.x-_points[0].x,pos.y-_points[0].y);
+        Point delta=new Point(pos.x-_points.elementAt(0).x,pos.y-_points.elementAt(0).y);
         for (Point x:_points){
             x.x+=delta.x;
             x.y+=delta.y;
@@ -50,8 +53,8 @@ public class DrawingLines extends DrawingItem {
         Graphics2D graphics2D=(Graphics2D)g;
         graphics2D.setColor(_color);
         graphics2D.setStroke(_stroke);
-        for(int i=1;i<_points.length;i++){
-            Point x=_points[i],y=_points[i-1];
+        for(int i=1;i<_points.size();i++){
+            Point x=_points.elementAt(i),y=_points.elementAt(i-1);
             graphics2D.drawLine(x.x,x.y,y.x,y.y);
         }
 //        for(Point x:_points){

@@ -24,7 +24,6 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
     DrawingBoard drawingBoard;
 //    LinkedList<JButton> buttons;
     Point begin, now, end;
-    Stroke dash;
     private void setPreview(){
         drawingBoard.setPreview(null);
     }
@@ -39,13 +38,13 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         switch (settings.getType()){
             case RECT:
             case IMAGE:
-                drawingBoard.setPreview(new DrawingShape(settings.color,new Rectangle(xx,yy,disX,disY),false,dash));
+                drawingBoard.setPreview(new DrawingShape(settings.color,new Rectangle(xx,yy,disX,disY),false,settings.getStroke()));
                 break;
             case OVAL:
-                drawingBoard.setPreview(new DrawingShape(settings.color,new Ellipse2D.Double(xx,yy,disX,disY),false,dash));
+                drawingBoard.setPreview(new DrawingShape(settings.color,new Ellipse2D.Double(xx,yy,disX,disY),false,settings.getStroke()));
                 break;
             case POINTS:
-                drawingBoard.setPreview(new DrawingPoints(settings.color,settings.getPoints().toArray(new Point[0]),settings.getStroke()));
+                drawingBoard.setPreview(new DrawingPoints(settings.color,settings.getPoints(),settings.getStroke()));
                 break;
             case TEXT:
                 drawingBoard.setPreview(new DrawingText(settings.getText(),now,settings.getFont(),settings.getColor()));
@@ -62,10 +61,6 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                               DrawingBoard drawingBoard) {
         this.settings = settings;
         this.drawingBoard = drawingBoard;
-        this.dash = new SerializableStroke(2.5f, SerializableStroke.CAP_BUTT,
-                SerializableStroke.JOIN_ROUND, 3.5f, new float[]{15, 10,},
-                0f);
-//        this.buttons=new LinkedList<>();
     }
 
     @Override
@@ -100,7 +95,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                 Vector<Point> previewPoints = (Vector<Point>) settings.getPoints().clone();
                 previewPoints.add(mouse);
                 drawingBoard.setPreview(new DrawingPoints(settings.color,
-                        previewPoints.toArray(new Point[0]), settings.getStroke()));
+                        previewPoints, settings.getStroke(),true));
                 drawingBoard.repaint();
                 break;
         }
@@ -191,7 +186,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                     setPreview();
                     break;
                 case POINTS:
-                    addListItem(new DrawingPoints(settings.color, points.toArray(new Point[0]), settings.getStroke()));
+                    addListItem(new DrawingPoints(settings.color, points, settings.getStroke()));
                     setPreview();
                     break;
                 case TEXT:
@@ -241,7 +236,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         }
         else if (settings.getType()== BoardSettings.Type.LINES){
 
-            addListItem(new DrawingLines(settings.getColor(),points.toArray(new Point[0]),settings.getStroke()));
+            addListItem(new DrawingLines(settings.getColor(),points,settings.getStroke()));
             setPreview();
             drawingBoard.repaint();
         }

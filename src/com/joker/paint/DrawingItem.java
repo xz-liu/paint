@@ -57,7 +57,7 @@ public abstract class DrawingItem implements Serializable {
     public abstract void reposition(Point pos);
     public abstract void draw(Graphics g);
 //    public abstract Rectangle getRectSelect();
-    public abstract Vector<Point> getResizePoints();
+    protected abstract Vector<Point> getResizePoints();
     public abstract DrawingItem createPreview();
 
 }
