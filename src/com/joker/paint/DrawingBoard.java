@@ -38,7 +38,8 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         switch (settings.getType()){
             case RECT:
             case IMAGE:
-                drawingBoard.setPreview(new DrawingShape(settings.color,new Rectangle(xx,yy,disX,disY),false,settings.getStroke()));
+                drawingBoard.setPreview(new DrawingImage(settings.getImgNow(),new Rectangle(xx,yy,disX,disY),settings.getMainFrame()));
+//                drawingBoard.setPreview(new DrawingShape(settings.color,new Rectangle(xx,yy,disX,disY),false,settings.getStroke()));
                 break;
             case OVAL:
                 drawingBoard.setPreview(new DrawingShape(settings.color,new Ellipse2D.Double(xx,yy,disX,disY),false,settings.getStroke()));
@@ -92,7 +93,8 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                 break;
             case POLYGON:
             case LINES:
-                Vector<Point> previewPoints = (Vector<Point>) settings.getPoints().clone();
+                Vector<Point> previewPoints =
+                        (Vector<Point>) settings.getPoints().clone();
                 previewPoints.add(mouse);
                 drawingBoard.setPreview(new DrawingPoints(settings.color,
                         previewPoints, settings.getStroke(),true));

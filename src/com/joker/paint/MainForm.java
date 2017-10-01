@@ -24,10 +24,13 @@ public class MainForm extends JFrame {
     private DrawingBoard board;
     private JPanel mainPanel, select, history, historyMain;
     private BoardSettings settings;
-    private JButton buttonOpenImg, buttonDelete, buttonPoints, buttonPolygon, buttonOval, buttonRect, buttonText, buttonLines;
-    private JTextField textImput;
-    private JButton buttonColor, buttonFont, buttonClear, buttonMove, buttonTop, buttonBottom, buttonSave, buttonSelect;
+    private JButton buttonOpenImg, buttonDelete,
+            buttonPoints, buttonPolygon, buttonOval,
+            buttonRect, buttonText, buttonLines;
+    private JButton buttonColor, buttonFont, buttonClear,
+            buttonMove, buttonTop, buttonBottom, buttonSave, buttonSelect;
     private JCheckBox checkBoxFill;
+    private JTextField textImput;
     private StrokeChooserPanel strokeChooserPanel;
 
     public JPanel getHistory() {
@@ -178,9 +181,10 @@ public class MainForm extends JFrame {
         buttonSave.addActionListener(e -> {
             BufferedImage image = board.getImage();
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Image File", "jpg", "png", "gif", "jpeg"));
-            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Paint Save File", "pnt"));
-//            fileChooser.a
+            fileChooser.addChoosableFileFilter
+                    (new FileNameExtensionFilter("Image File", "jpg", "png", "gif", "jpeg"));
+            fileChooser.addChoosableFileFilter
+                    (new FileNameExtensionFilter("Paint Save File", "pnt"));
             if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
                 // save to file
@@ -251,6 +255,7 @@ public class MainForm extends JFrame {
                 settings.setType(BoardSettings.Type.BOTTOM);
             }
             settings.clearPoints();
+            settings.clearPoints();
         });
         buttonDelete = new JButton("Del");
         buttonDelete.addActionListener(e -> {
@@ -261,13 +266,17 @@ public class MainForm extends JFrame {
             else {
                 settings.setType(BoardSettings.Type.DELETE);
             }settings.clearPoints();
+            settings.clearPoints();
         });
         buttonMove = new JButton("Move");
         buttonMove.addActionListener(e -> {
             if (settings.getType() == BoardSettings.Type.SELECT) {
+                settings.getPointNow().getItem().getRelatedButton().move();
+                settings.getPointNow().getItem().getRelatedButton().reposition();
             } else {
                 settings.setType(BoardSettings.Type.MOVE);
             }
+            settings.clearPoints();
             settings.clearPoints();
         });
 

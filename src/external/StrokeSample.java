@@ -8,11 +8,13 @@ import java.awt.geom.Point2D;
 public class StrokeSample extends JComponent implements ListCellRenderer {
     private Stroke stroke;
     private Dimension preferredSize;
+
     public StrokeSample(final Stroke stroke) {
         this.stroke = stroke;
         this.preferredSize = new Dimension(80, 18);
         setPreferredSize(this.preferredSize);
     }
+
     public Stroke getStroke() {
         return this.stroke;
     }
@@ -40,9 +42,9 @@ public class StrokeSample extends JComponent implements ListCellRenderer {
         final double hh = size.getHeight() - insets.top - insets.bottom;
 
         // calculate point one
-        final Point2D one =  new Point2D.Double(xx + 6, yy + hh / 2);
+        final Point2D one = new Point2D.Double(xx + 6, yy + hh / 2);
         // calculate point two
-        final Point2D two =  new Point2D.Double(xx + ww - 6, yy + hh / 2);
+        final Point2D two = new Point2D.Double(xx + ww - 6, yy + hh / 2);
         // draw a circle at point one
         final Ellipse2D circle1 = new Ellipse2D.Double(one.getX() - 5,
                 one.getY() - 5, 10, 10);
@@ -63,12 +65,12 @@ public class StrokeSample extends JComponent implements ListCellRenderer {
         }
 
     }
+
     public Component getListCellRendererComponent(JList list, Object value,
                                                   int index, boolean isSelected, boolean cellHasFocus) {
         if (value instanceof Stroke) {
             setStroke((Stroke) value);
-        }
-        else {
+        } else {
             setStroke(null);
         }
         return this;

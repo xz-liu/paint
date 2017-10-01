@@ -64,15 +64,17 @@ import javax.swing.*;
  */
  public class StrokeChooserPanel extends JPanel {
 
-    /** A combo for selecting the stroke. */
+    /**
+     * A combo for selecting the stroke.
+     */
     private JComboBox selector;
 
     /**
      * Creates a panel containing a combo-box that allows the user to select
      * one stroke from a list of available strokes.
      *
-     * @param current  the current stroke sample.
-     * @param available  an array of 'available' stroke samples.
+     * @param current   the current stroke sample.
+     * @param available an array of 'available' stroke samples.
      */
     public StrokeChooserPanel(StrokeSample current, StrokeSample[] available) {
         setLayout(new BorderLayout());
@@ -96,9 +98,10 @@ import javax.swing.*;
         });
     }
 
-    public void addSelectorListener(ActionListener listener){
+    public void addSelectorListener(ActionListener listener) {
         this.selector.addActionListener(listener);
     }
+
     /**
      * Returns the selector component.
      *
