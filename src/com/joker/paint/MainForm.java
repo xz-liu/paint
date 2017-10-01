@@ -22,7 +22,8 @@ import java.io.IOException;
  */
 public class MainForm extends JFrame {
     private DrawingBoard board;
-    private JPanel mainPanel, select, history, historyMain;
+    private JToolBar select;
+    private JPanel mainPanel, history, historyMain;
     private BoardSettings settings;
     private JButton buttonOpenImg, buttonDelete,
             buttonPoints, buttonPolygon, buttonOval,
@@ -213,23 +214,38 @@ public class MainForm extends JFrame {
         checkBoxFill.addActionListener(e -> {
             settings.setFill(checkBoxFill.isSelected());
         });
-        select.add(buttonSave);
-        select.add(buttonOpenImg);
-        select.add(Box.createRigidArea(new Dimension(3, 1)));
-        select.add(strokeChooserPanel);
-        select.add(buttonColor);
-        select.add(buttonSelect);
-        select.add(Box.createRigidArea(new Dimension(3, 1)));
-        select.add(buttonPoints);
-        select.add(buttonLines);
-        select.add(buttonOval);
-        select.add(buttonRect);
-        select.add(buttonPolygon);
-        select.add(checkBoxFill);
-        select.add(buttonFont);
-        select.add(textImput);
-        select.add(buttonText);
-        select.add(buttonClear);
+
+        JToolBar barSaveOpen=new JToolBar();
+        JToolBar barChoose=new JToolBar();
+        JToolBar barShapes=new JToolBar();
+        JToolBar barText=new JToolBar();
+
+        barSaveOpen.add(buttonSave);
+        barSaveOpen.add(buttonOpenImg);
+
+        barChoose.add(buttonSelect);
+        barChoose.add(buttonClear);
+
+        barShapes.add(strokeChooserPanel);
+        barShapes.add(buttonColor);
+
+        barShapes.add(buttonPoints);
+        barShapes.add(buttonLines);
+        barShapes.add(buttonOval);
+        barShapes.add(buttonRect);
+        barShapes.add(buttonPolygon);
+        barShapes.add(checkBoxFill);
+
+        barText.add(buttonFont);
+        barText.add(textImput);
+        barText.add(buttonText);
+
+
+        select.add(barSaveOpen);
+        select.add(barChoose);
+        select.add(barShapes);
+        select.add(barText);
+
 
     }
 
@@ -333,12 +349,14 @@ public class MainForm extends JFrame {
         mainPanel = new JPanel();
         mainPanel.setSize(d);
         mainPanel.setLayout(new BorderLayout(1, 1));
-        select = new JPanel();
+        select = new JToolBar();
         initHistory();
         select.setSize(new Dimension(700, 30));
         initChoose();
         settings = new BoardSettings(this);
-        board = new DrawingBoard(settings, new Dimension(d.width - historyMain.getWidth(), d.height - historyMain.getHeight()));
+        board = new DrawingBoard(settings,
+                new Dimension(d.width - historyMain.getWidth(),
+                        d.height - historyMain.getHeight()));
         initButtons();
         mainPanel.add(board);
         mainPanel.add(select, BorderLayout.NORTH);

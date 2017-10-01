@@ -77,7 +77,7 @@ import javax.swing.*;
      * @param available an array of 'available' stroke samples.
      */
     public StrokeChooserPanel(StrokeSample current, StrokeSample[] available) {
-        setLayout(new BorderLayout());
+//        setLayout(new BorderLayout());
         // we've changed the behaviour here to populate the combo box
         // with Stroke objects directly - ideally we'd change the signature
         // of the constructor too...maybe later.
@@ -85,16 +85,17 @@ import javax.swing.*;
         for (int i = 0; i < available.length; i++) {
             model.addElement(available[i].getStroke());
         }
+//        this.setPreferredSize(new Dimension(50,20));
         this.selector = new JComboBox(model);
+        this.selector.setSize(new Dimension(50,0));
         this.selector.setSelectedItem(current.getStroke());
         this.selector.setRenderer(new StrokeSample(null));
+
         add(this.selector);
         // Changes due to focus problems!! DZ
 
-        this.selector.addActionListener(new ActionListener() {
-            public void actionPerformed(final ActionEvent evt) {
-                getSelector().transferFocus();
-            }
+        this.selector.addActionListener(e-> {
+            getSelector().transferFocus();
         });
     }
 
