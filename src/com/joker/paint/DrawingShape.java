@@ -78,7 +78,6 @@ public class DrawingShape extends DrawingItem {
         }
         return points;
     }
-
     @Override
     public void resize(int resizePointRank, Point posTo) {
         switch (resizePointRank){

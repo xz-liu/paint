@@ -37,15 +37,16 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                 disY = Math.abs(beg.y - mouse.y);
         switch (settings.getType()){
             case RECT:
+                drawingBoard.setPreview(new DrawingShape(settings.getColor(),new Rectangle(xx,yy,disX,disY),settings.isFill(),settings.getStroke()));
+                break;
             case IMAGE:
                 drawingBoard.setPreview(new DrawingImage(settings.getImgNow(),new Rectangle(xx,yy,disX,disY),settings.getMainFrame()));
-//                drawingBoard.setPreview(new DrawingShape(settings.color,new Rectangle(xx,yy,disX,disY),false,settings.getStroke()));
                 break;
             case OVAL:
-                drawingBoard.setPreview(new DrawingShape(settings.color,new Ellipse2D.Double(xx,yy,disX,disY),false,settings.getStroke()));
+                drawingBoard.setPreview(new DrawingShape(settings.getColor(),new Ellipse2D.Double(xx,yy,disX,disY),settings.isFill(),settings.getStroke()));
                 break;
             case POINTS:
-                drawingBoard.setPreview(new DrawingPoints(settings.color,settings.getPoints(),settings.getStroke()));
+                drawingBoard.setPreview(new DrawingPoints(settings.getColor(),settings.getPoints(),settings.getStroke()));
                 break;
             case TEXT:
                 drawingBoard.setPreview(new DrawingText(settings.getText(),now,settings.getFont(),settings.getColor()));
