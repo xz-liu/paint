@@ -1,8 +1,5 @@
 package com.joker.paint;
 
-
-import external.SerializableStroke;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -325,19 +322,16 @@ public class DrawingBoard extends JPanel  {
         g.setColor(Color.BLACK);
         g.drawRect(0,0,getWidth(),getHeight());
         if(itemsList != null)
-            for(DrawingItem items : itemsList) {
-                items.draw(g);
-            }
+            itemsList.forEach(item -> {
+                item.draw(g);
+                if(settings.getType()== BoardSettings.Type.SELECT){
+                    item.drawResizePoint(g);
+                }
+            });
 
         if(preview!=null) {
             preview.draw(g);
         }
-        if(settings.getType()== BoardSettings.Type.SELECT&&
-                itemsList != null)
-            for(DrawingItem items : itemsList) {
-                items.getResizePoint().draw(g);
-            }
-
 //        selectBoard.repaint(new Rectangle(0,0,700,30));
     }
 

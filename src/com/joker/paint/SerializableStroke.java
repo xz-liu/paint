@@ -1,13 +1,14 @@
-package external;
+package com.joker.paint;
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
  * Created by Adam on 2017/9/29.
  */
-public class SerializableStroke implements java.io.Serializable,Stroke {
+public class SerializableStroke implements Serializable,Stroke {
     public transient BasicStroke basicStroke;
 
     public SerializableStroke(float width, int cap, int join, float miterlimit,
@@ -45,7 +46,7 @@ public class SerializableStroke implements java.io.Serializable,Stroke {
     }
 
     public SerializableStroke(float width) {
-        this(width, CAP_SQUARE, JOIN_MITER, 10.0f, null, 0.0f);
+        this(width, CAP_ROUND, JOIN_MITER, 10.0f, null, 0.0f);
     }
 
     public SerializableStroke() {

@@ -1,7 +1,8 @@
 package com.joker.paint;
 
-import external.SerializableStroke;
 import external.StrokeSample;
+
+import java.io.Serializable;
 
 public class StrokeLibrary {
     public static final StrokeSample[] strokes = {

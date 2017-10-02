@@ -76,6 +76,6 @@ public class DrawingImage extends DrawingItem {
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         _image=ImageIO.read(in);
-        _imgObserver=MainForm.getMainFormInstance();
+        _imgObserver=Entry.getMainFormInstance();
     }
 }

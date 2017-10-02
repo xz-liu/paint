@@ -8,9 +8,16 @@ public class ResizePoint extends DrawingItem {
     DrawingItem item;
     boolean show;
     private final double radius = 10;
-    private static final Stroke dash = new BasicStroke(1.5f, BasicStroke.CAP_BUTT,
-            BasicStroke.JOIN_ROUND, 1.5f, new float[]{15, 10,},
+    private static final Stroke dash = new SerializableStroke(1.5f,
+            SerializableStroke.CAP_BUTT,
+            SerializableStroke.JOIN_ROUND,
+            5f, new float[]{30, 40,},
             0f);
+
+    private static final Stroke ordinary=new SerializableStroke();
+
+    private static final Color colorWhite = new Color(1.0f, 1.0f, 1.0f, 0.4f);
+    private static final Color colorBlack = new Color(0.0f, 0.0f, 0.0f, 0.4f);
 
     public ResizePoint(DrawingItem itemRef) {
         super(Type.RESIZEPOINT, true);
@@ -70,36 +77,40 @@ public class ResizePoint extends DrawingItem {
         }
         return -1;
     }
-
-    @Override
-    public void draw(Graphics g) {
-        final Color colorWhite = new Color(1.0f, 1.0f, 1.0f, 0.4f);
-        final Color colorBlack = new Color(0.0f, 0.0f, 0.0f, 0.4f);
-        Graphics2D graphics2D = (Graphics2D) g;
-        graphics2D.setStroke(new BasicStroke(1));
-        graphics2D.setStroke(dash);
-        if (show) {
-            graphics2D.setColor(Color.BLACK);
-        } else {
-            graphics2D.setColor(colorWhite);
-        }
-
-        for (int i = 1; i < points.size(); i++) {
-            Point x = points.elementAt(i - 1), y = points.elementAt(i);
-            graphics2D.drawLine(x.x, x.y, y.x, y.y);
-        }
-        for (Point point : points) {
+    private void setDrawColor(Graphics2D graphics2D,boolean white){
+        if (white) {
             if (show)
                 graphics2D.setColor(Color.WHITE);
             else
                 graphics2D.setColor(colorWhite);
+        }
+        else {
+            if (show) {
+                graphics2D.setColor(Color.BLACK);
+            } else {
+                graphics2D.setColor(colorBlack);
+            }
+        }
 
+    }
+    @Override
+    public void draw(Graphics g) {
+        Graphics2D graphics2D = (Graphics2D) g;
+        graphics2D.setStroke(new BasicStroke(1));
+        for (int i = 1; i < points.size(); i++) {
+            Point x = points.elementAt(i - 1), y = points.elementAt(i);
+            setDrawColor(graphics2D,true);
+            graphics2D.setStroke(ordinary);
+            graphics2D.drawLine(x.x, x.y, y.x, y.y);
+            setDrawColor(graphics2D,false);
+            graphics2D.setStroke(dash);
+            graphics2D.drawLine(x.x, x.y, y.x, y.y);
+        }
+        for (Point point : points) {
+            setDrawColor(graphics2D,true);
             graphics2D.fillOval(point.x - (int) radius, point.y - (int) radius,
                     (int) radius * 2, (int) radius * 2);
-            if (show)
-                graphics2D.setColor(Color.BLACK);
-            else
-                graphics2D.setColor(colorBlack);
+            setDrawColor(graphics2D,false);
             graphics2D.drawOval(point.x - (int) radius, point.y - (int) radius,
                     (int) radius * 2, (int) radius * 2);
         }
