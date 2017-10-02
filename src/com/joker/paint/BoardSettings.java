@@ -23,6 +23,7 @@ public class BoardSettings {
     DrawingItem itemReplacing;
     ResizePoint pointNow;
     int selectPoint;
+    JLabel labelMode;
     public int getSelectPoint(){return selectPoint;}
     public void setSelectPoint(int i){
         selectPoint=i;
@@ -67,7 +68,7 @@ public class BoardSettings {
 
     Font  font;
     public BoardSettings(MainForm mainFrame) {
-        type = Type.POINTS;
+        type = INITIAL_TYPE;
         this.mainFrame = mainFrame;
         this.color=Color.BLACK;
         this.stroke=mainFrame.getStrokeChooserPanel().getSelectedStroke();
@@ -77,6 +78,7 @@ public class BoardSettings {
         this.font=new JLabel().getFont();
         this.text="";
         this.itemReplacing=null;
+        this.labelMode=mainFrame.getLabelModeNow();
         pointNow=null;
     }
     public void clearPoints(){
@@ -90,6 +92,7 @@ public class BoardSettings {
 
     public void setType(Type type) {
         this.type = type;
+        labelMode.setText("MODE : "+type.toString());
     }
 
     public Type getType() {
@@ -147,4 +150,6 @@ public class BoardSettings {
     public void setPoints(Vector<Point> points) {
         this.points = points;
     }
+
+    public static final Type INITIAL_TYPE=Type.POINTS;
 }

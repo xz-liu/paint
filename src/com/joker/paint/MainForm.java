@@ -33,6 +33,7 @@ public class MainForm extends JFrame {
     private JCheckBox checkBoxFill;
     private JTextField textImput;
     private StrokeChooserPanel strokeChooserPanel;
+    private JLabel labelModeNow;
 
     public JPanel getHistory() {
         return history;
@@ -237,17 +238,19 @@ public class MainForm extends JFrame {
         barShapes.add(checkBoxFill);
 
         barText.add(buttonFont);
-        barText.add(textImput);
         barText.add(buttonText);
-
+        barText.add(textImput);
 
         select.add(barSaveOpen);
         select.add(barChoose);
         select.add(barShapes);
         select.add(barText);
 
+        select.add(labelModeNow);
 
     }
+
+
 
     private void initHistory() {
 
@@ -353,6 +356,9 @@ public class MainForm extends JFrame {
         initHistory();
         select.setSize(new Dimension(700, 30));
         initChoose();
+
+        labelModeNow=new JLabel("MODE : "+BoardSettings.INITIAL_TYPE.toString());
+
         settings = new BoardSettings(this);
         board = new DrawingBoard(settings,
                 new Dimension(d.width - historyMain.getWidth(),
@@ -364,6 +370,10 @@ public class MainForm extends JFrame {
         mainPanel.add(historyMain, BorderLayout.WEST);
         this.add(mainPanel);
         select.revalidate();
+    }
+
+    public JLabel getLabelModeNow() {
+        return labelModeNow;
     }
 
     private static MainForm mainForm;
