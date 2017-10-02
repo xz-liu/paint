@@ -45,8 +45,8 @@ public class DrawingLines extends DrawingItem {
     }
 
     @Override
-    public Vector<Point> getResizePoints() {
-        return new Vector(Arrays.asList(_points));
+    protected Vector<Point> getResizePoints() {
+        return (Vector<Point>) _points.clone();
     }
 
     public void draw(Graphics g){
