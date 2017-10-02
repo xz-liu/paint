@@ -1,7 +1,5 @@
 package com.joker.paint;
 
-import org.w3c.dom.css.Rect;
-
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.util.Vector;
@@ -105,6 +103,7 @@ public class DrawingShape extends DrawingItem {
                     int x=Math.min(rectangle.x,posTo.x),y=Math.min(rectangle.y,posTo.y),
                             disX=Math.abs(posTo.x-rectangle.x),disY=Math.abs(posTo.y-rectangle.y);
                     _shape=new Rectangle(x,y,disX,disY);
+
                 }
                 if(_shape instanceof Ellipse2D.Double){
                     Ellipse2D.Double oval=(Ellipse2D.Double) _shape;

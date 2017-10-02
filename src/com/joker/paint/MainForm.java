@@ -315,8 +315,8 @@ public class MainForm extends JFrame {
 
         historyScroll.setBounds(0, 0, 0, 50);
         history.setAutoscrolls(true);
-        historyScroll.setPreferredSize(new Dimension(80, 700));
-        history.setSize(new Dimension(100, 700));
+        historyScroll.setPreferredSize(new Dimension(80, 500));
+        history.setSize(new Dimension(100, 500));
         history.setLayout(new BoxLayout(history, BoxLayout.PAGE_AXIS));
         historyMain.add(historyScroll);
     }
@@ -333,7 +333,7 @@ public class MainForm extends JFrame {
         }
 
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setSize(d.width - 100, d.height - 100);
+        this.setSize(d.width *2/3, d.height *4/5);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -367,7 +367,10 @@ public class MainForm extends JFrame {
         mainPanel.add(board);
         mainPanel.add(select, BorderLayout.NORTH);
 //        mainPanel.add(history,BorderLayout.WEST);
-        mainPanel.add(historyMain, BorderLayout.WEST);
+        
+        JToolBar toolBarHistory=new JToolBar(JToolBar.VERTICAL);
+        toolBarHistory.add(historyMain);
+        mainPanel.add(toolBarHistory, BorderLayout.WEST);
         this.add(mainPanel);
         select.revalidate();
     }
