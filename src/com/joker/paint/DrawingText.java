@@ -30,7 +30,7 @@ public class DrawingText extends DrawingItem {
     }
 
     @Override
-    public Vector<Point> getResizePoints() {
+    protected Vector<Point> getResizePoints() {
         Vector<Point> points=new Vector<>();
         points.add(pos);
         return points;

@@ -57,7 +57,7 @@ public class DrawingShape extends DrawingItem {
     }
 
     @Override
-    public Vector<Point> getResizePoints() {
+    protected Vector<Point> getResizePoints() {
         Vector<Point> points=new Vector<>();
         if(_shape instanceof Rectangle){
             Rectangle rectangle=(Rectangle)_shape;

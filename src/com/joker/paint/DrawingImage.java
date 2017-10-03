@@ -39,7 +39,7 @@ public class DrawingImage extends DrawingItem {
     }
 
     @Override
-    public Vector<Point> getResizePoints() {
+    protected Vector<Point> getResizePoints() {
         Vector<Point> points=new Vector<>();
         points.add(new Point(_pos.x,_pos.y));
         points.add(new Point(_pos.x+_pos.width,_pos.y+_pos.height));

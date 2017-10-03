@@ -50,7 +50,7 @@ public class DrawingPolygon extends DrawingItem {
     }
 
     @Override
-    public Vector<Point> getResizePoints() {
+    protected Vector<Point> getResizePoints() {
         Vector<Point> points=new Vector<>();
         for(int i=0;i<_shape.npoints;i++){
             points.add(new Point(_shape.xpoints[i],_shape.ypoints[i]));

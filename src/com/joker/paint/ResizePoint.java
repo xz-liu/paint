@@ -1,7 +1,7 @@
 package com.joker.paint;
 
-        import java.awt.*;
-        import java.util.Vector;
+import java.awt.*;
+import java.util.Vector;
 
 public class ResizePoint extends DrawingItem {
     Vector<Point> points;
@@ -117,7 +117,7 @@ public class ResizePoint extends DrawingItem {
     }
 
     @Override
-    public Vector<Point> getResizePoints() {
+    protected Vector<Point> getResizePoints() {
         return null;
     }
 
