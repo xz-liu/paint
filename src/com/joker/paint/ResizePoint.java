@@ -8,10 +8,21 @@ public class ResizePoint extends DrawingItem {
     DrawingItem item;
     boolean show;
     private final double radius = 10;
+
+    @Override
+    public Rectangle getBounds() {
+        return null;
+    }
+
+    @Override
+    public boolean contains(Point point) {
+        return false;
+    }
+
     private static final Stroke dash = new SerializableStroke(1.5f,
             SerializableStroke.CAP_BUTT,
             SerializableStroke.JOIN_ROUND,
-            5f, new float[]{30, 40,},
+            1f, new float[]{15, 10,},
             0f);
 
     private static final Stroke ordinary=new SerializableStroke();

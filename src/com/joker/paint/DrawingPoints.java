@@ -28,6 +28,28 @@ public class DrawingPoints extends DrawingItem {
     }
 
     @Override
+    public boolean contains(Point point) {
+        for (Point p : _points) {
+            if (p.equals(point)) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE,
+                maxX = 0, maxY = 0;
+        for (Point p : _points) {
+            maxX = Math.max(maxX, p.x);
+            maxY = Math.max(maxY, p.y);
+            minX = Math.min(minX, p.x);
+            minY = Math.min(minY, p.y);
+        }
+        return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+    }
+
+
+    @Override
     protected Vector<Point> getResizePoints() {
         Vector<Point> points=new Vector<>();
         if (_points.size()!=0)points.add(_points.elementAt(0));

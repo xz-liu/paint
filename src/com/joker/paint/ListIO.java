@@ -3,7 +3,6 @@ package com.joker.paint;
 import javax.swing.*;
 import java.io.*;
 import java.util.LinkedList;
-import java.util.List;
 
 public class ListIO {
     public static LinkedList<DrawingItem> readList(JFrame mainForm, File file) throws IOException {
@@ -18,7 +17,7 @@ public class ListIO {
             fis.close();
             return list;
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(mainForm, "File not found");
+            JOptionPane.showMessageDialog(mainForm, "Load file Error:" + e.getMessage());
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
            JOptionPane.showMessageDialog(mainForm, "Class not found");

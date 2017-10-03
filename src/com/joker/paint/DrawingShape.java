@@ -1,5 +1,6 @@
 package com.joker.paint;
 
+
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.util.Vector;
@@ -54,6 +55,16 @@ public class DrawingShape extends DrawingItem {
             oval.y=pos.y;
             _shape=oval;
         }
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        return _shape.getBounds();
+    }
+
+    @Override
+    public boolean contains(Point point) {
+        return _shape.contains(point);
     }
 
     @Override

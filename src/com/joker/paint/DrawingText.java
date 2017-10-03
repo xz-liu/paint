@@ -30,6 +30,18 @@ public class DrawingText extends DrawingItem {
     }
 
     @Override
+    public boolean contains(Point point) {
+        return false;
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        int sizeY = font.getSize();
+        int sizeX = sizeY * text.length();
+        return new Rectangle(pos.x, pos.y - sizeY, sizeX, sizeY);
+    }
+
+    @Override
     protected Vector<Point> getResizePoints() {
         Vector<Point> points=new Vector<>();
         points.add(pos);

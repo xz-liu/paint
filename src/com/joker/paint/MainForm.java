@@ -12,7 +12,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -125,6 +126,7 @@ public class MainForm extends JFrame {
                 JOptionPane.showMessageDialog(this, "Read file failed");
             }
             settings.clearPoints();
+
         });
         buttonRect = new JButton("Rect");
         buttonRect.addActionListener(e -> {

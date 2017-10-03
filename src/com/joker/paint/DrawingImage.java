@@ -39,6 +39,16 @@ public class DrawingImage extends DrawingItem {
     }
 
     @Override
+    public Rectangle getBounds() {
+        return _pos;
+    }
+
+    @Override
+    public boolean contains(Point point) {
+        return _pos.contains(point);
+    }
+
+    @Override
     protected Vector<Point> getResizePoints() {
         Vector<Point> points=new Vector<>();
         points.add(new Point(_pos.x,_pos.y));

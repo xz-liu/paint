@@ -2,7 +2,6 @@ package com.joker.paint;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -15,45 +14,48 @@ import java.util.Vector;
 /**
  * Created by Adam on 2017/9/15.
  */
-class BoardMouseListener implements MouseListener,MouseMotionListener {
+class BoardMouseListener implements MouseListener, MouseMotionListener {
 
     BoardSettings settings;
     DrawingBoard drawingBoard;
-//    LinkedList<JButton> buttons;
+    //    LinkedList<JButton> buttons;
     Point begin, now, end;
-    private void setPreview(){
+
+    private void setPreview() {
         drawingBoard.setPreview(null);
     }
-    private void setPreview(DrawingItem item){
+
+    private void setPreview(DrawingItem item) {
         drawingBoard.setPreview(item);
     }
-    private void setPreview(Point beg,Point mouse){
+
+    private void setPreview(Point beg, Point mouse) {
         int xx = Math.min(beg.x, mouse.x),
                 yy = Math.min(beg.y, mouse.y),
                 disX = Math.abs(beg.x - mouse.x),
                 disY = Math.abs(beg.y - mouse.y);
-        switch (settings.getType()){
+        switch (settings.getType()) {
             case RECT:
-                drawingBoard.setPreview(new DrawingShape(settings.getColor(),new Rectangle(xx,yy,disX,disY),settings.isFill(),settings.getStroke()));
+                drawingBoard.setPreview(new DrawingShape(settings.getColor(), new Rectangle(xx, yy, disX, disY), settings.isFill(), settings.getStroke()));
                 break;
             case IMAGE:
-                drawingBoard.setPreview(new DrawingImage(settings.getImgNow(),new Rectangle(xx,yy,disX,disY),settings.getMainFrame()));
+                drawingBoard.setPreview(new DrawingImage(settings.getImgNow(), new Rectangle(xx, yy, disX, disY), settings.getMainFrame()));
                 break;
             case OVAL:
-                drawingBoard.setPreview(new DrawingShape(settings.getColor(),new Ellipse2D.Double(xx,yy,disX,disY),settings.isFill(),settings.getStroke()));
+                drawingBoard.setPreview(new DrawingShape(settings.getColor(), new Ellipse2D.Double(xx, yy, disX, disY), settings.isFill(), settings.getStroke()));
                 break;
             case POINTS:
-                drawingBoard.setPreview(new DrawingPoints(settings.getColor(),settings.getPoints(),settings.getStroke()));
+                drawingBoard.setPreview(new DrawingPoints(settings.getColor(), settings.getPoints(), settings.getStroke()));
                 break;
             case TEXT:
-                drawingBoard.setPreview(new DrawingText(settings.getText(),now,settings.getFont(),settings.getColor()));
+                drawingBoard.setPreview(new DrawingText(settings.getText(), now, settings.getFont(), settings.getColor()));
                 break;
         }
     }
 
-    private void repositionPreview(Point pos){
-        if (drawingBoard.getPreview()!=null)
-             drawingBoard.getPreview().reposition(pos);
+    private void repositionPreview(Point pos) {
+        if (drawingBoard.getPreview() != null)
+            drawingBoard.getPreview().reposition(pos);
     }
 
     public BoardMouseListener(BoardSettings settings,
@@ -68,13 +70,11 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         if (settings.getType() == BoardSettings.Type.POINTS) {
             settings.getPoints().addElement(now);
             setPreview(begin, now);
-        }
-        else if(settings.getType()== BoardSettings.Type.SELECT){
-            ResizePoint resizePoint=settings.getPointNow();
-            if(resizePoint!=null&&resizePoint.valid())
-                resizePoint.getItem().resize(settings.getSelectPoint(),now);
-        }
-        else if (settings.getType() != BoardSettings.Type.MOVE)
+        } else if (settings.getType() == BoardSettings.Type.SELECT) {
+            ResizePoint resizePoint = settings.getPointNow();
+            if (resizePoint != null && resizePoint.valid())
+                resizePoint.getItem().resize(settings.getSelectPoint(), now);
+        } else if (settings.getType() != BoardSettings.Type.MOVE)
             setPreview(begin, now);
         else {
             repositionPreview(now);
@@ -95,7 +95,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                         (Vector<Point>) settings.getPoints().clone();
                 previewPoints.add(mouse);
                 drawingBoard.setPreview(new DrawingPoints(settings.color,
-                        previewPoints, settings.getStroke(),true));
+                        previewPoints, settings.getStroke(), true));
                 drawingBoard.repaint();
                 break;
         }
@@ -110,12 +110,11 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                 settings.getPoints().addElement(now);
 //                System.out.println("clicked1");
                 setPreview(begin, now);
-            }else if (settings.getType() == BoardSettings.Type.LINES) {
+            } else if (settings.getType() == BoardSettings.Type.LINES) {
 //                System.out.println("clicked2");
                 settings.getPoints().addElement(now);
                 setPreview(begin, now);
-            }
-            else if (settings.getType() != BoardSettings.Type.MOVE)
+            } else if (settings.getType() != BoardSettings.Type.MOVE)
                 setPreview(begin, now);
             else {
                 repositionPreview(now);
@@ -124,7 +123,7 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
         drawingBoard.repaint();
     }
 
-    private void selectResizePoint(Point point){
+    private void selectResizePoint(Point point) {
         for (ListIterator<DrawingItem> iter =
              drawingBoard.getItemsList().
                      listIterator(drawingBoard.getItemsList().size()); iter.hasPrevious(); ) {
@@ -134,18 +133,30 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
                 settings.nextResizePoint(item.getResizePoint());
 //                JOptionPane.showMessageDialog(null,result);
                 settings.setSelectPoint(result);
-                break;
+                drawingBoard.repaint();
+                return;
             }
-            drawingBoard.repaint();
+        }
+        for (ListIterator<DrawingItem> iter =
+             drawingBoard.getItemsList().
+                     listIterator(drawingBoard.getItemsList().size()); iter.hasPrevious(); ) {
+            DrawingItem item = iter.previous();
+            if (item.contains(point)) {
+                settings.nextResizePoint(item.getResizePoint());
+                settings.setSelectPoint(0);
+                drawingBoard.repaint();
+                return;
+            }
         }
     }
+
     @Override
     public void mousePressed(MouseEvent e) {
         begin = new Point(e.getPoint());
         if (settings.getType() == BoardSettings.Type.SELECT) {
             selectResizePoint(begin);
-        } else if (settings.getType()!= BoardSettings.Type.POLYGON&&
-                settings.getType()!= BoardSettings.Type.LINES){
+        } else if (settings.getType() != BoardSettings.Type.POLYGON &&
+                settings.getType() != BoardSettings.Type.LINES) {
             settings.getPoints().addElement(begin);
 //            System.out.println("pressed");
         }
@@ -155,14 +166,14 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
     public void mouseReleased(MouseEvent e) {
         if (begin != null) {
             end = new Point(e.getPoint());
-            if (settings.getType()!= BoardSettings.Type.POLYGON&&
-                    settings.getType()!= BoardSettings.Type.LINES) {
+            if (settings.getType() != BoardSettings.Type.POLYGON &&
+                    settings.getType() != BoardSettings.Type.LINES) {
                 settings.getPoints().addElement(end);
 
 //                System.out.println("released");
             }
             Vector<Point> points = settings.getPoints();
-            if(points.isEmpty())return;
+            if (points.isEmpty()) return;
             double xx = Math.min(points.firstElement().x, points.lastElement().x),
                     yy = Math.min(points.firstElement().y, points.lastElement().y),
                     disX = Math.abs(points.firstElement().x - points.lastElement().x),
@@ -212,39 +223,39 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
-        if(drawingBoard.getPreview()!=null
-                &&drawingBoard.getPreview().isSelectedPreview()
-                &&settings.getType()!= BoardSettings.Type.MOVE){
+        if (drawingBoard.getPreview() != null
+                && drawingBoard.getPreview().isSelectedPreview()
+                && settings.getType() != BoardSettings.Type.MOVE) {
             setPreview();
             drawingBoard.repaint();
         }
         Vector<Point> points = settings.getPoints();
-        if(points==null||points.size()<=1)return;
+        if (points == null || points.size() <= 1) return;
         if (settings.getType() == BoardSettings.Type.POLYGON) {
-                int[] xpoints = new int[points.size()], ypoints = new int[points.size()];
-                int i = 0;
-                for (Point point : points) {
-                    xpoints[i] = (point.x);
-                    ypoints[i] = (point.y);
-                    i++;
-                }
+            int[] xpoints = new int[points.size()], ypoints = new int[points.size()];
+            int i = 0;
+            for (Point point : points) {
+                xpoints[i] = (point.x);
+                ypoints[i] = (point.y);
+                i++;
+            }
 //            JOptionPane.showMessageDialog(settings.mainFrame,stringBuilder.toString());
-                addListItem(new DrawingPolygon(settings.color,
-                        new Polygon(xpoints, ypoints, points.size()), settings.isFill(), settings.getStroke()));
-                setPreview();
+            addListItem(new DrawingPolygon(settings.color,
+                    new Polygon(xpoints, ypoints, points.size()), settings.isFill(), settings.getStroke()));
+            setPreview();
             drawingBoard.repaint();
-        }
-        else if (settings.getType()== BoardSettings.Type.LINES){
+        } else if (settings.getType() == BoardSettings.Type.LINES) {
 
-            addListItem(new DrawingLines(settings.getColor(),points,settings.getStroke()));
+            addListItem(new DrawingLines(settings.getColor(), points, settings.getStroke()));
             setPreview();
             drawingBoard.repaint();
         }
     }
+
     private void addListItem(DrawingItem item) {
         if (settings.getPoints() != null) {
             drawingBoard.getItemsList().add(item);
-            HistoryButton button=new HistoryButton(drawingBoard,settings.getType().toString(),item);
+            HistoryButton button = new HistoryButton(drawingBoard, settings.getType().toString(), item);
             item.setRelatedButton(button);
             settings.getHistory().add(button);
             settings.getHistory().revalidate();
@@ -253,18 +264,19 @@ class BoardMouseListener implements MouseListener,MouseMotionListener {
     }
 }
 
-public class DrawingBoard extends JPanel  {
+public class DrawingBoard extends JPanel {
     BoardSettings settings;
     LinkedList<DrawingItem> itemsList;
     DrawingItem preview;
     BoardMouseListener listener;
 
     private BufferedImage image;
-    DrawingBoard(BoardSettings settings,Dimension dimension){
-        this.settings=settings;
+
+    DrawingBoard(BoardSettings settings, Dimension dimension) {
+        this.settings = settings;
         setSize(dimension);
-        itemsList=new LinkedList<>();
-        listener=new BoardMouseListener(settings,this);
+        itemsList = new LinkedList<>();
+        listener = new BoardMouseListener(settings, this);
         this.addMouseListener(listener);
         this.addMouseMotionListener(listener);
     }
@@ -282,9 +294,10 @@ public class DrawingBoard extends JPanel  {
         return itemsList;
     }
 
-    void setPreview(DrawingItem item){
-        this.preview=item;
+    void setPreview(DrawingItem item) {
+        this.preview = item;
     }
+
     public DrawingItem getPreview() {
         return preview;
     }
@@ -299,13 +312,13 @@ public class DrawingBoard extends JPanel  {
         return image;
     }
 
-    public void readList(LinkedList<DrawingItem> list){
+    public void readList(LinkedList<DrawingItem> list) {
         clearBoard();
         itemsList.addAll(list);
-        for (DrawingItem item:itemsList){
+        for (DrawingItem item : itemsList) {
             item.initResizePoint();
             item.setRelatedButton(new HistoryButton
-                    (this,item.getType().toString(), item));
+                    (this, item.getType().toString(), item));
             settings.getHistory().add(item.getRelatedButton());
         }
         settings.getHistory().revalidate();
@@ -315,21 +328,24 @@ public class DrawingBoard extends JPanel  {
 
 
     @Override
-    public void paint(Graphics g){
+    public void paint(Graphics g) {
         super.paintComponent(g);
         g.setColor(Color.WHITE);
-        g.fillRect(0,0,getWidth(),getHeight());
+        g.fillRect(0, 0, getWidth(), getHeight());
         g.setColor(Color.BLACK);
-        g.drawRect(0,0,getWidth(),getHeight());
-        if(itemsList != null)
+        g.drawRect(0, 0, getWidth(), getHeight());
+        if (itemsList != null)
             itemsList.forEach(item -> {
                 item.draw(g);
-                if(settings.getType()== BoardSettings.Type.SELECT){
+                if (settings.getType() == BoardSettings.Type.SELECT) {
                     item.drawResizePoint(g);
                 }
             });
-
-        if(preview!=null) {
+        if (settings.getType() == BoardSettings.Type.SELECT &&
+                settings.getPointNow() != null) {
+            settings.getPointNow().getItem().drawBounds(g);
+        }
+        if (preview != null) {
             preview.draw(g);
         }
 //        selectBoard.repaint(new Rectangle(0,0,700,30));

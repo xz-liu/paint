@@ -58,6 +58,13 @@ public abstract class DrawingItem implements Serializable {
         getResizePoint().draw(graphics);
     }
 
+    public void drawBounds(Graphics graphics) {
+        Graphics2D graphics2D = (Graphics2D) graphics;
+        graphics2D.setStroke(StrokeLibrary.strokes[12].getStroke());
+        graphics2D.setColor(Color.BLACK);
+        graphics2D.draw(getBounds());
+    }
+
     protected boolean isItem(){
         return !(this instanceof ResizePoint);
     }
@@ -68,4 +75,7 @@ public abstract class DrawingItem implements Serializable {
     protected abstract Vector<Point> getResizePoints();
     public abstract DrawingItem createPreview();
 
+    public abstract boolean contains(Point point);
+
+    public abstract Rectangle getBounds();
 }

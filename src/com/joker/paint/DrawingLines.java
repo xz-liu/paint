@@ -1,10 +1,9 @@
 package com.joker.paint;
 
 //import external.BetterBasicStroke;
-import external.StrokeSample;
 
 import java.awt.*;
-import java.util.Arrays;
+import java.awt.geom.Line2D;
 import java.util.Vector;
 
 /**
@@ -49,6 +48,28 @@ public class DrawingLines extends DrawingItem {
         return (Vector<Point>) _points.clone();
     }
 
+    @Override
+    public Rectangle getBounds() {
+        int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE,
+                maxX = 0, maxY = 0;
+        for (Point p : _points) {
+            maxX = Math.max(maxX, p.x);
+            maxY = Math.max(maxY, p.y);
+            minX = Math.min(minX, p.x);
+            minY = Math.min(minY, p.y);
+        }
+        return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+    }
+
+    @Override
+    public boolean contains(Point point) {
+        for (int i = 1; i < _points.size(); i++) {
+            Line2D.Double lineNow = new Line2D.Double(
+                    _points.elementAt(i - 1), _points.elementAt(i));
+            if (lineNow.contains(point)) return true;
+        }
+        return false;
+    }
     public void draw(Graphics g){
         Graphics2D graphics2D=(Graphics2D)g;
         graphics2D.setColor(_color);

@@ -50,6 +50,17 @@ public class DrawingPolygon extends DrawingItem {
     }
 
     @Override
+    public boolean contains(Point point) {
+        return _shape.contains(point);
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        _shape.invalidate();
+        return _shape.getBounds();
+    }
+
+    @Override
     protected Vector<Point> getResizePoints() {
         Vector<Point> points=new Vector<>();
         for(int i=0;i<_shape.npoints;i++){
