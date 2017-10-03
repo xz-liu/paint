@@ -142,7 +142,7 @@ public class BoardSettings {
 
     public Vector<Point> getPoints() {
         if(points==null){
-            points=new Vector<Point>();
+            points = new Vector<>();
         }
         return points;
     }
