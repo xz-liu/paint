@@ -36,6 +36,19 @@ public class BoardSettings {
         return pointNow;
     }
 
+    public boolean typeIsFunction() {
+        switch (type) {
+            case SELECT:
+            case MOVE:
+            case TOP:
+            case BOTTOM:
+            case DELETE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public void nextResizePoint(ResizePoint pointNext){
         if(pointNow!=null){
             pointNow.setShow(false);
@@ -93,6 +106,7 @@ public class BoardSettings {
     public void setType(Type type) {
         this.type = type;
         labelMode.setText("MODE : "+type.toString());
+        clearPoints();
     }
 
     public Type getType() {

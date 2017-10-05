@@ -79,29 +79,24 @@ public class MainForm extends JFrame {
         buttonSelect.addActionListener(e -> {
             settings.setType(BoardSettings.Type.SELECT);
             settings.nextResizePoint(null);
-            settings.clearPoints();
         });
         buttonLines = new JButton("Lines");
         buttonLines.addActionListener(e -> {
             settings.setType(BoardSettings.Type.LINES);
-            settings.clearPoints();
             board.repaint();
         });
         buttonPoints = new JButton("Pen");
-        buttonPoints.addActionListener(e -> {
-            settings.setType(BoardSettings.Type.POINTS);
-            settings.clearPoints();
-        });
+        buttonPoints.addActionListener(e ->
+                settings.setType(BoardSettings.Type.POINTS));
+
         buttonOval = new JButton("Oval");
-        buttonOval.addActionListener(e -> {
-            settings.setType(BoardSettings.Type.OVAL);
-            settings.clearPoints();
-        });
+        buttonOval.addActionListener(e ->
+                settings.setType(BoardSettings.Type.OVAL));
+
         buttonPolygon = new JButton("Polygon");
-        buttonPolygon.addActionListener(e -> {
-            settings.setType(BoardSettings.Type.POLYGON);
-            settings.clearPoints();
-        });
+        buttonPolygon.addActionListener(e ->
+                settings.setType(BoardSettings.Type.POLYGON));
+
         buttonOpenImg = new JButton("Open");
         buttonOpenImg.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
@@ -131,12 +126,10 @@ public class MainForm extends JFrame {
         buttonRect = new JButton("Rect");
         buttonRect.addActionListener(e -> {
             settings.setType(BoardSettings.Type.RECT);
-            settings.clearPoints();
         });
         buttonText = new JButton("Text");
         buttonText.addActionListener(e -> {
             settings.setType(BoardSettings.Type.TEXT);
-            settings.clearPoints();
         });
 
         buttonColor = new JButton("Color");
@@ -187,7 +180,7 @@ public class MainForm extends JFrame {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.addChoosableFileFilter
                     (new FileNameExtensionFilter("Image File", "jpg", "png", "gif", "jpeg"));
-            fileChooser.addChoosableFileFilter
+            fileChooser.setFileFilter
                     (new FileNameExtensionFilter("Paint Save File", "pnt"));
             if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
@@ -208,7 +201,7 @@ public class MainForm extends JFrame {
                         ListIO.saveList(this, board.getItemsList(), file);
                     }
                 } catch (IOException ioe) {
-                    JOptionPane.showMessageDialog(this, "Save Failed");
+                    JOptionPane.showMessageDialog(this, "Save Failed :" + ioe.getMessage());
                 }
             }
         });
@@ -264,7 +257,7 @@ public class MainForm extends JFrame {
             }
             else {
                 settings.setType(BoardSettings.Type.TOP);
-            }settings.clearPoints();
+            }
 
         });
         buttonBottom = new JButton("Bottom");
@@ -275,8 +268,6 @@ public class MainForm extends JFrame {
             } else {
                 settings.setType(BoardSettings.Type.BOTTOM);
             }
-            settings.clearPoints();
-            settings.clearPoints();
         });
         buttonDelete = new JButton("Del");
         buttonDelete.addActionListener(e -> {
@@ -286,8 +277,7 @@ public class MainForm extends JFrame {
             }
             else {
                 settings.setType(BoardSettings.Type.DELETE);
-            }settings.clearPoints();
-            settings.clearPoints();
+            }
         });
         buttonMove = new JButton("Move");
         buttonMove.addActionListener(e -> {
@@ -297,8 +287,6 @@ public class MainForm extends JFrame {
             } else {
                 settings.setType(BoardSettings.Type.MOVE);
             }
-            settings.clearPoints();
-            settings.clearPoints();
         });
 
         historyMain = new JPanel();
@@ -343,10 +331,15 @@ public class MainForm extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if (JOptionPane.showConfirmDialog(settings.getMainFrame(),
-                        "Discard all changes?") == 0) {
-                    e.getWindow().dispose();
-                    System.exit(0);
+                switch (JOptionPane.showConfirmDialog(settings.getMainFrame(),
+                        "Discard all changes?")) {
+                    case 0:
+                        e.getWindow().dispose();
+                        System.exit(0);
+                        break;
+                    case 1:
+                        buttonSave.doClick();
+                        break;
                 }
             }
         });
