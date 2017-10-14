@@ -14,6 +14,15 @@ import java.util.Vector;
 /**
  * Created by Adam on 2017/9/15.
  */
+
+/**
+ * The listener of DrawingBoard
+ *
+ * @author joker, yulao, kunshen
+ * @see DrawingBoard
+ * @see java.awt.event.MouseListener
+ * @see java.awt.event.MouseMotionListener
+ */
 class BoardMouseListener implements MouseListener, MouseMotionListener {
 
     BoardSettings settings;
@@ -29,6 +38,12 @@ class BoardMouseListener implements MouseListener, MouseMotionListener {
         drawingBoard.setPreview(item);
     }
 
+    /**
+     * Set preview
+     *
+     * @param beg   The point that drawing begins
+     * @param mouse The point that mouse at now
+     */
     private void setPreview(Point beg, Point mouse) {
         int xx = Math.min(beg.x, mouse.x),
                 yy = Math.min(beg.y, mouse.y),
@@ -58,6 +73,10 @@ class BoardMouseListener implements MouseListener, MouseMotionListener {
         }
     }
 
+    /**
+     * Reposition current preview to pos
+     * @param pos
+     */
     private void repositionPreview(Point pos) {
         if (drawingBoard.getPreview() != null)
             drawingBoard.getPreview().reposition(pos);
@@ -250,6 +269,10 @@ class BoardMouseListener implements MouseListener, MouseMotionListener {
         }
     }
 
+    /**
+     * Add the item to the list of all items
+     * @param item
+     */
     private void addListItem(DrawingItem item) {
         if (settings.getPoints() != null) {
             drawingBoard.getItemsList().add(item);
@@ -262,6 +285,11 @@ class BoardMouseListener implements MouseListener, MouseMotionListener {
     }
 }
 
+/**
+ * The mighty drawing board!!!
+ *
+ * @author joker, yulao, kunshen
+ */
 public class DrawingBoard extends JPanel {
     BoardSettings settings;
     LinkedList<DrawingItem> itemsList;
@@ -279,6 +307,9 @@ public class DrawingBoard extends JPanel {
         this.addMouseMotionListener(listener);
     }
 
+    /**
+     * Clears the drawing board
+     */
     public void clearBoard() {
         itemsList.clear();
         settings.getHistory().removeAll();
@@ -294,6 +325,10 @@ public class DrawingBoard extends JPanel {
         return itemsList;
     }
 
+    /**
+     * Set current preview
+     * @param item
+     */
     void setPreview(DrawingItem item) {
         this.preview = item;
     }
@@ -302,6 +337,10 @@ public class DrawingBoard extends JPanel {
         return preview;
     }
 
+    /**
+     * Used when saving as image
+     * @return An image of the copy of the drawing board
+     */
     public BufferedImage getImage() {
         image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         Graphics g = image.createGraphics();
@@ -311,6 +350,10 @@ public class DrawingBoard extends JPanel {
         return image;
     }
 
+    /**
+     * Copy param list to item list
+     * @param list
+     */
     public void readList(LinkedList<DrawingItem> list) {
         clearBoard();
         itemsList.addAll(list);
@@ -325,7 +368,10 @@ public class DrawingBoard extends JPanel {
         repaint();
     }
 
-
+    /**
+     * Draw all item and preview on g
+     * @param g
+     */
     @Override
     public void paint(Graphics g) {
         super.paintComponent(g);

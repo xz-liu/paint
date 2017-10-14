@@ -7,10 +7,15 @@ import java.util.Vector;
 /**
  * Created by Adam on 2017/9/22.
  */
+
+/**
+ * A class that saves current global settings
+ */
 public class BoardSettings {
     public enum Type{
-     POINTS,IMAGE,POLYGON,OVAL,RECT,TEXT,DELETE,MOVE,TOP,BOTTOM,LINES,SELECT
+        POINTS,IMAGE,POLYGON,OVAL,RECT,TEXT,DELETE,MOVE,TOP,BOTTOM,LINES,SELECT
     }
+
     Stroke stroke;
     Color color;
     boolean fill;
@@ -24,10 +29,13 @@ public class BoardSettings {
     ResizePoint pointNow;
     int selectPoint;
     JLabel labelMode;
+
     public int getSelectPoint(){return selectPoint;}
+
     public void setSelectPoint(int i){
         selectPoint=i;
     }
+
     public MainForm getMainFrame() {
         return mainFrame;
     }
@@ -64,9 +72,11 @@ public class BoardSettings {
             getItemReplacing().reposition(pos);
         }
     }
+
     public DrawingItem getItemReplacing() {
         return itemReplacing;
     }
+
     public void setItemReplacing(DrawingItem item){
         itemReplacing=item;
     }
@@ -80,6 +90,7 @@ public class BoardSettings {
     }
 
     Font  font;
+
     public BoardSettings(MainForm mainFrame) {
         type = INITIAL_TYPE;
         this.mainFrame = mainFrame;
@@ -94,6 +105,7 @@ public class BoardSettings {
         this.labelMode=mainFrame.getLabelModeNow();
         pointNow=null;
     }
+
     public void clearPoints(){
         setPoints(null);
         mainFrame.getBoard().repaint();
