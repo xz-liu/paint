@@ -7,13 +7,27 @@ import java.util.Vector;
 /**
  * Created by Adam on 2017/9/15.
  */
+
+/**
+ * A class that saves all information about one item
+ * which should be painted on the paint board
+ *
+ * @author joker
+ */
 public abstract class DrawingItem implements Serializable {
 
+    /**
+     * Type of all inherited drawing item
+     */
     public enum Type{
         IMAGE,TEXT,RECT,OVAL,SHAPE,POINTS,POLYGON,RESIZEPOINT
     }
 
+    /**
+     * The color is used when you select an item on history panel
+     */
     protected static final Color selectedColor=Color.RED;
+
     public static final Color getSelectedColor(){
         return selectedColor;
     }
@@ -23,7 +37,7 @@ public abstract class DrawingItem implements Serializable {
     protected transient HistoryButton relatedButton;
     protected boolean selectedPreview;
 
-    protected DrawingItem(Type type,boolean isPreview){
+    protected DrawingItem(Type type, boolean isPreview){
         _type=type;
         selectedPreview =isPreview;
     }
@@ -31,6 +45,7 @@ public abstract class DrawingItem implements Serializable {
     public Type getType(){
         return _type;
     }
+
     public void setType(Type t){
         _type =t;
     }
@@ -38,6 +53,7 @@ public abstract class DrawingItem implements Serializable {
     public boolean isSelectedPreview() {
         return selectedPreview;
     }
+
     public void initResizePoint(){
         resizePoint=new ResizePoint(this);
     }
@@ -50,14 +66,27 @@ public abstract class DrawingItem implements Serializable {
         return relatedButton;
     }
 
+    /**
+     * Related button in history panel
+     *
+     * @param relatedButton
+     */
     public void setRelatedButton(HistoryButton relatedButton) {
         this.relatedButton = relatedButton;
     }
 
+    /**
+     * Draw resize points in resize mode
+     * @param graphics
+     */
     public void drawResizePoint(Graphics graphics) {
         getResizePoint().draw(graphics);
     }
 
+    /**
+     * Draws the rectangle bound of an item when is selected in resize mode
+     * @param graphics
+     */
     public void drawBounds(Graphics graphics) {
         Graphics2D graphics2D = (Graphics2D) graphics;
         graphics2D.setStroke(StrokeLibrary.strokes[12].getStroke());
@@ -69,13 +98,43 @@ public abstract class DrawingItem implements Serializable {
         return !(this instanceof ResizePoint);
     }
 
-    public abstract void resize(int resizePointRank,Point posTo);
+    /**
+     * Modify some of the properties of this item
+     * @param resizePointRank selected resize point
+     * @param posTo mouse position
+     */
+    public abstract void resize(int resizePointRank, Point posTo);
+
+    /**
+     * Reposition this item
+     * @param pos
+     */
     public abstract void reposition(Point pos);
+
+    /**
+     * Draw this item on param g
+     * @param g
+     */
     public abstract void draw(Graphics g);
+
+    /**
+     * @return A vector of points that can be selected in resize mode
+     */
     protected abstract Vector<Point> getResizePoints();
+
+    /**
+     * @return A nearly copy of this item, used as preview
+     */
     public abstract DrawingItem createPreview();
 
+    /**
+     * @param point
+     * @return whether this item contains the point
+     */
     public abstract boolean contains(Point point);
 
+    /**
+     * @return A rectangle which is the bound of this item
+     */
     public abstract Rectangle getBounds();
 }

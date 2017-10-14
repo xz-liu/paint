@@ -113,10 +113,8 @@ class BoardMouseListener implements MouseListener, MouseMotionListener {
         if (begin != null) {
             if (settings.getType() == BoardSettings.Type.POLYGON) {
                 settings.getPoints().addElement(now);
-//                System.out.println("clicked1");
                 setPreview(begin, now);
             } else if (settings.getType() == BoardSettings.Type.LINES) {
-//                System.out.println("clicked2");
                 settings.getPoints().addElement(now);
                 setPreview(begin, now);
             } else if (settings.getType() != BoardSettings.Type.MOVE)
@@ -136,7 +134,6 @@ class BoardMouseListener implements MouseListener, MouseMotionListener {
             int result;
             if ((result = item.getResizePoint().selected(point)) >= 0) {
                 settings.nextResizePoint(item.getResizePoint());
-//                JOptionPane.showMessageDialog(null,result);
                 settings.setSelectPoint(result);
                 drawingBoard.repaint();
                 return;
@@ -163,7 +160,6 @@ class BoardMouseListener implements MouseListener, MouseMotionListener {
         } else if (settings.getType() != BoardSettings.Type.POLYGON &&
                 settings.getType() != BoardSettings.Type.LINES) {
             settings.getPoints().addElement(begin);
-//            System.out.println("pressed");
         }
     }
 
@@ -174,8 +170,6 @@ class BoardMouseListener implements MouseListener, MouseMotionListener {
             if (settings.getType() != BoardSettings.Type.POLYGON &&
                     settings.getType() != BoardSettings.Type.LINES) {
                 settings.getPoints().addElement(end);
-
-//                System.out.println("released");
             }
             Vector<Point> points = settings.getPoints();
             if (points.isEmpty()) return;
@@ -186,14 +180,14 @@ class BoardMouseListener implements MouseListener, MouseMotionListener {
             switch (settings.getType()) {
                 case OVAL:
                     addListItem(new DrawingShape(settings.color,
-                            new Ellipse2D.Double(xx, yy, disX, disY), settings.isFill(), settings.getStroke()));
-//                    settings.setPoints(null);
+                            new Ellipse2D.Double(xx, yy, disX, disY),
+                            settings.isFill(), settings.getStroke()));
                     setPreview();
                     break;
                 case RECT:
                     addListItem(new DrawingShape(settings.color,
-                            new Rectangle((int) xx, (int) yy, (int) disX, (int) disY), settings.isFill(), settings.getStroke()));
-//                    settings.setPoints(null);
+                            new Rectangle((int) xx, (int) yy, (int) disX, (int) disY),
+                            settings.isFill(), settings.getStroke()));
                     setPreview();
                     break;
                 case IMAGE:
@@ -244,7 +238,6 @@ class BoardMouseListener implements MouseListener, MouseMotionListener {
                 ypoints[i] = (point.y);
                 i++;
             }
-//            JOptionPane.showMessageDialog(settings.mainFrame,stringBuilder.toString());
             addListItem(new DrawingPolygon(settings.color,
                     new Polygon(xpoints, ypoints, points.size()), settings.isFill(), settings.getStroke()));
             setPreview();
@@ -314,7 +307,6 @@ public class DrawingBoard extends JPanel {
         Graphics g = image.createGraphics();
         g.fillRect(0, 0, image.getWidth(), image.getHeight());
         this.setPreview(null);
-        this.repaint();
         this.print(g);
         return image;
     }

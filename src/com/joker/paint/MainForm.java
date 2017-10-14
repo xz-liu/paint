@@ -56,7 +56,7 @@ public class MainForm extends JFrame {
         });
     }
 
-    boolean asImageFile(File file) {
+    private boolean asImageFile(File file) {
         String name = file.getName(), extension;
         int extBegin = name.lastIndexOf('.');
 //        boolean asImageFile;
@@ -242,10 +242,7 @@ public class MainForm extends JFrame {
         select.add(barText);
 
         select.add(labelModeNow);
-
     }
-
-
 
     private void initHistory() {
 
@@ -316,7 +313,6 @@ public class MainForm extends JFrame {
             this.setUndecorated(false);
 //            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//            UIManager.setLookAndFeel(new NapkinLookAndFeel());
             SwingUtilities.updateComponentTreeUI(this);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "LOAD UI FAILED");
